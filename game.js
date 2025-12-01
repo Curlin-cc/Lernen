@@ -212,8 +212,8 @@ const generalQuestions = [
     },
     {
         question: 'Beschreiben Sie anhand eines Beispiels, wie Paketfilterregeln funktionieren.',
-        correctAnswers: ['Ein Paketfilter prüft Felder wie Quelladresse Zieladresse Port und Richtung. Beispiel Regel erlaubt aus dem internen Netz Port 80 nach außen und blockiert eingehende Verbindungen von außen'],
-        requiredKeywords: [['paketfilter', 'prüft'], ['quelladresse', 'zieladresse', 'port'], ['erlaubt', 'blockiert', 'regel']]
+        correctAnswers: ['Ein Paketfilter arbeitet wie ein Türsteher, der eine Liste strikt von oben nach unten abarbeitet: Sobald er eine Regel findet, die auf das Datenpaket passt (z.B. Erlaube alles auf Port 80), lässt er es sofort passieren und ignoriert alle weiteren Regeln. Wenn keine erlaubenden Regeln passen, greift eine automatische Alles andere verbieten Regel.'],
+        requiredKeywords: [['paketfilter', 'türsteher', 'liste'], ['regel', 'port'], ['passieren', 'verbieten', 'erlauben']]
     },
     {
         question: 'Beschreiben Sie die Funktionsweise einer NAT-Firewall.',
