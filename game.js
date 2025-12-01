@@ -234,8 +234,8 @@ const generalQuestions = [
     },
     {
         question: 'Was bedeutet WAN?',
-        correctAnswers: ['Weitverkehrsnetz'],
-        requiredKeywords: [['weitverkehr', 'wide area', 'wan']]
+        correctAnswers: ['Ein WAN (Wide Area Network) verbindet Computernetzwerke (meistens LANs) über weite geografische Entfernungen hinweg – also über Städte, Länder oder sogar Kontinente.'],
+        requiredKeywords: [['wide', 'area'], ['verbind', 'netzwerk'], ['weit', 'entfernung', 'geograf', 'stadt', 'land', 'kontinent']]
     },
     {
         question: 'Was ist IEEE 802.11n/ac?',
