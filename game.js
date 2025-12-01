@@ -30,8 +30,8 @@ const generalQuestions = [
     },
     {
         question: 'Die Übertragungskapazitäten von WLAN und Ethernet sind nicht direkt vergleichbar. Nennen Sie drei Gründe.',
-        correctAnswers: ['Gemeinsames Medium mit Kollisionen. Hoher Protokoll und Steuerungsaufwand. Stärkere Schwankungen durch Störungen und Dämpfung'],
-        requiredKeywords: [['kollision', 'gemeinsam'], ['protokoll', 'overhead', 'aufwand'], ['störung', 'schwankung', 'dämpfung']]
+        correctAnswers: ['Shared Medium, Störung und Dämpfung, Half Duplex'],
+        requiredKeywords: [['shared medium', 'gemeinsam'], ['störung', 'dämpfung'], ['half duplex', 'halbduplex']]
     },
     {
         question: 'Was ist ein ISM-Band und was bedeutet es für WLAN?',
