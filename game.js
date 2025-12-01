@@ -786,7 +786,8 @@ const elements = {
     bossImage: null,
     bossName: null,
     gameArea: null,
-    heartsContainer: null
+    heartsContainer: null,
+    brainInlineBtn: null
 };
 
 // Initialize game
@@ -812,6 +813,7 @@ function initGame() {
     elements.bossName = document.getElementById('bossName');
     elements.gameArea = document.getElementById('gameArea');
     elements.heartsContainer = document.getElementById('heartsContainer');
+    elements.brainInlineBtn = document.getElementById('brainInlineBtn');
 
     // Event listeners for mode selection
     elements.osiLayerBtn.addEventListener('click', () => startGame('osi-layer'));
@@ -819,6 +821,9 @@ function initGame() {
     elements.generalModeBtn.addEventListener('click', () => startGame('general'));
     elements.ralphModeBtn.addEventListener('click', () => startGame('ralph'));
     elements.brainModeBtn.addEventListener('click', () => startGame('brain'));
+    
+    // Event listener for inline brain button
+    elements.brainInlineBtn.addEventListener('click', handleBrainInlineClick);
     
     // Event listeners for game
     elements.answerInput.addEventListener('keypress', handleKeyPress);
@@ -1032,12 +1037,6 @@ function handleCorrectAnswer() {
     } else {
         currentQuestionIndex++;
         
-        if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
-            showMessage(`✅ Richtig! Frage ${currentQuestionIndex} von 7 gemeistert!`, 'success');
-        } else {
-            showMessage(`✅ Richtig! Weiter so!`, 'success');
-        }
-        
         // Update boss health
         updateBossHealth();
         
@@ -1047,6 +1046,11 @@ function handleCorrectAnswer() {
         if (currentQuestionIndex >= currentQuestions.length) {
             victory();
         } else {
+            if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
+                showMessage(`✅ Richtig! Frage ${currentQuestionIndex} von 7 gemeistert!`, 'success');
+            } else {
+                showMessage(`✅ Richtig! Weiter so!`, 'success');
+            }
             updateQuestion();
         }
     }
@@ -1059,14 +1063,8 @@ function handleWrongAnswer() {
     updateAttemptsDisplay();
     updateHeartsDisplay();
     
-    // Track wrong question (außer im OSI-Modus)
-    if (gameMode === 'general' || gameMode === 'ralph') {
-        const currentQ = currentQuestions[currentQuestionIndex];
-        const wrongCount = wrongQuestions.get(currentQ.question) || 0;
-        wrongQuestions.set(currentQ.question, wrongCount + 1);
-        saveWrongQuestions();
-        updateBrainButton();
-    } else if (gameMode === 'brain') {
+    // Track wrong question im Brain-Modus
+    if (gameMode === 'brain') {
         // Im Brain-Modus: Reset streak
         const currentQ = currentQuestions[currentQuestionIndex];
         brainStreaks.set(currentQ.question, 0);
@@ -1168,19 +1166,8 @@ function handleCounter() {
     updateAttemptsDisplay();
     updateHeartsDisplay();
     
-    // Falls im general/ralph Modus, wrongQuestions korrigieren
-    if (gameMode === 'general' || gameMode === 'ralph') {
-        const currentQ = currentQuestions[currentQuestionIndex];
-        const wrongCount = wrongQuestions.get(currentQ.question) || 0;
-        if (wrongCount > 0) {
-            wrongQuestions.set(currentQ.question, wrongCount - 1);
-            if (wrongCount - 1 === 0) {
-                wrongQuestions.delete(currentQ.question);
-            }
-            saveWrongQuestions();
-            updateBrainButton();
-        }
-    } else if (gameMode === 'brain') {
+    // Im Brain-Modus Streak wiederherstellen
+    if (gameMode === 'brain') {
         // Im Brain-Modus: Streak wiederherstellen
         const currentQ = currentQuestions[currentQuestionIndex];
         const currentStreak = brainStreaks.get(currentQ.question) || 0;
@@ -1360,6 +1347,9 @@ function updateQuestion() {
             <strong>Frage:</strong> ${currentQ.question}
         `;
     }
+    
+    // Update inline brain button state
+    updateBrainInlineButton();
 }
 
 // Update boss health display
@@ -1450,6 +1440,50 @@ function updateBrainButton() {
         elements.brainModeBtn.disabled = false;
         elements.brainDescription.textContent = `${brainCount} schwierige Frage${brainCount > 1 ? 'n' : ''} warten auf dich!`;
     }
+    
+    // Update inline brain button visibility
+    updateBrainInlineButton();
+}
+
+// Update inline brain button state
+function updateBrainInlineButton() {
+    if (!elements.brainInlineBtn) return;
+    
+    // Nur in general/ralph Modus sichtbar
+    if (gameMode === 'general' || gameMode === 'ralph') {
+        elements.brainInlineBtn.style.display = 'flex';
+        
+        const currentQ = currentQuestions[currentQuestionIndex];
+        if (currentQ && wrongQuestions.has(currentQ.question)) {
+            elements.brainInlineBtn.classList.add('in-brain');
+            elements.brainInlineBtn.title = 'Bereits im Smoothbrain';
+        } else {
+            elements.brainInlineBtn.classList.remove('in-brain');
+            elements.brainInlineBtn.title = 'Zum Smoothbrain hinzufügen';
+        }
+    } else {
+        elements.brainInlineBtn.style.display = 'none';
+    }
+}
+
+// Handle inline brain button click
+function handleBrainInlineClick() {
+    const currentQ = currentQuestions[currentQuestionIndex];
+    if (!currentQ) return;
+    
+    if (wrongQuestions.has(currentQ.question)) {
+        // Entfernen aus Smoothbrain
+        wrongQuestions.delete(currentQ.question);
+        saveWrongQuestions();
+        showMessage('🧠 Frage aus Smoothbrain entfernt!', 'success');
+    } else {
+        // Hinzufügen zu Smoothbrain
+        wrongQuestions.set(currentQ.question, 1);
+        saveWrongQuestions();
+        showMessage('🧠 Frage zum Smoothbrain hinzugefügt!', 'success');
+    }
+    
+    updateBrainButton();
 }
 
 // Save wrong questions to localStorage
@@ -1467,7 +1501,7 @@ function loadWrongQuestions() {
             wrongQuestions = new Map(data);
             updateBrainButton();
         } catch (e) {
-            console.error('Fehler beim Laden der falschen Fragen:', e);
+            console.error('Fehler beim Laden der Smoothbrain Fragen:', e);
         }
     }
 }
