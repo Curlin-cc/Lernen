@@ -1094,14 +1094,47 @@ function isAnswerCorrect(answer) {
             ...currentQuestions[currentQuestionIndex].alternatives.map(a => a.toLowerCase())
         ];
         return correctAnswers.some(correct => answer.includes(correct.split(' ')[0]));
-    } else if (gameMode === 'general') {
+    } else if (gameMode === 'general' || gameMode === 'brain') {
+        const currentQ = currentQuestions[currentQuestionIndex];
         const correctAnswers = [
-            ...currentQuestions[currentQuestionIndex].correctAnswers.map(a => a.toLowerCase()),
-            ...currentQuestions[currentQuestionIndex].alternatives.map(a => a.toLowerCase())
+            ...currentQ.correctAnswers.map(a => a.toLowerCase()),
+            ...currentQ.alternatives.map(a => a.toLowerCase())
         ];
+        
+        // Wenn die Frage eine bestimmte Anzahl erfordert (z.B. "zwei", "drei", "vier")
+        const requiredCount = getRequiredAnswerCount(currentQ.question);
+        
+        if (requiredCount > 0) {
+            // Zähle wie viele verschiedene Schlüsselwörter der Nutzer genannt hat
+            const foundKeywords = new Set();
+            correctAnswers.forEach(keyword => {
+                if (answer.includes(keyword.toLowerCase())) {
+                    foundKeywords.add(keyword);
+                }
+            });
+            
+            // Mindestens die geforderte Anzahl muss vorhanden sein
+            return foundKeywords.size >= requiredCount;
+        }
+        
+        // Normale Prüfung - mindestens ein Schlüsselwort muss vorkommen
         return correctAnswers.some(correct => answer.includes(correct.toLowerCase()));
     }
     return false;
+}
+
+// Ermittelt wie viele Antworten in der Frage gefordert werden
+function getRequiredAnswerCount(question) {
+    const lowerQuestion = question.toLowerCase();
+    
+    if (lowerQuestion.includes('vier')) return 4;
+    if (lowerQuestion.includes('drei')) return 3;
+    if (lowerQuestion.includes('zwei')) return 2;
+    if (lowerQuestion.includes('2 ')) return 2;
+    if (lowerQuestion.includes('3 ')) return 3;
+    if (lowerQuestion.includes('4 ')) return 4;
+    
+    return 0; // Keine spezifische Anzahl gefordert
 }
 
 // Handle correct answer
