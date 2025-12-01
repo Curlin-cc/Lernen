@@ -210,29 +210,6 @@ input[type="text"]:focus {
     }
 }
 
-.progress {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.layer {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    margin: 5px;
-    border: 2px solid #555;
-    border-radius: 5px;
-    line-height: 36px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.layer.correct {
-    background: #2ed573;
-    border-color: #2ed573;
-    color: white;
-}
-
 .jakubasch-laugh {
     font-size: 1.3em;
     color: #ff3838;

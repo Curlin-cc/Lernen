@@ -770,17 +770,9 @@ function resetQuestionsAndLives() {
     if (gameMode === 'osi-layer') {
         // OSI Layer-Nummern: feste Reihenfolge 1-7
         currentQuestions = [...osiLayers];
-        // Reset all layer markers
-        for (let i = 1; i <= 7; i++) {
-            document.getElementById(`layer${i}`).classList.remove('correct');
-        }
     } else if (gameMode === 'osi-props') {
         // OSI Eigenschaften: zufällige Reihenfolge
         currentQuestions = shuffleArray([...osiLayers]);
-        // Reset all layer markers
-        for (let i = 1; i <= 7; i++) {
-            document.getElementById(`layer${i}`).classList.remove('correct');
-        }
     } else if (gameMode === 'general') {
         currentQuestions = shuffleArray([...generalQuestions]);
     } else if (gameMode === 'brain') {
@@ -815,14 +807,6 @@ function resetGame() {
     }
     
     updateBossHealth();
-    
-    // Reset all layers (for OSI mode)
-    if (gameMode === 'osi') {
-        for (let i = 1; i <= 7; i++) {
-            document.getElementById(`layer${i}`).classList.remove('correct');
-        }
-    }
-    
     updateQuestion();
     elements.answerInput.focus();
 }
