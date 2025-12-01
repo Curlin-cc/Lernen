@@ -92,8 +92,8 @@ const generalQuestions = [
     },
     {
         question: 'Welche Ethernet-Varianten sind im WAN gebräuchlich?',
-        correctAnswers: ['Typisch Metro Ethernet und Carrier Ethernet'],
-        requiredKeywords: [['metro', 'carrier']]
+        correctAnswers: ['10GBase-T, 100Base-TX und 1000Base-T'],
+        requiredKeywords: [['10gbase', '100base', '1000base']]
     },
     {
         question: 'In welchen Bereichen sind Glasfasern und in welchen sind Kupferkabel vorzuziehen?',
