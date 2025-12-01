@@ -318,8 +318,439 @@ const osiLayers = [
     }
 ];
 
+// Ralph Fragen (Rechnerarchitektur & Betriebssysteme)
+const ralphQuestions = [
+    {
+        question: 'Was sind die Komponenten der von-Neumann-Architektur?',
+        correctAnswers: ['Rechenwerk ALU, Steuerwerk Control Unit, Speicher für Daten und Programme, Ein-/Ausgabewerk. Verbunden durch Bus-System. Rechen- und Steuerwerk bilden die CPU.'],
+        requiredKeywords: [['rechenwerk', 'alu'], ['steuerwerk', 'control'], ['speicher'], ['bus', 'ein', 'ausgabe']]
+    },
+    {
+        question: 'Was unterscheidet die von-Neumann-Architektur von der Harvard-Architektur?',
+        correctAnswers: ['Von-Neumann nutzt gemeinsamen Speicher und Bus für Befehle und Daten (Flaschenhals). Harvard hat getrennte Speicher und Busse für parallele Zugriffe.'],
+        requiredKeywords: [['von-neumann', 'neumann', 'gemeinsam'], ['harvard', 'getrennt', 'parallel']]
+    },
+    {
+        question: 'Wieso ist es gerechtfertigt, komplexe moderne Speicherstrukturen als einen Speicher zu behandeln?',
+        correctAnswers: ['Durch Abstraktion. Hardware (MMU) und Betriebssystem verbergen die Hierarchie (Register, Cache, RAM, Festplatte). Der Programmierer sieht nur einen linearen Adressraum (virtueller Speicher).'],
+        requiredKeywords: [['abstraktion'], ['mmu', 'betriebssystem', 'hardware'], ['virtuell', 'linear', 'adressraum']]
+    },
+    {
+        question: 'Inwiefern unterscheidet sich unser Rechnermodell von der von-Neumann-Architektur?',
+        correctAnswers: ['Das theoretische Modell idealisiert das Zeitverhalten (1 Takt pro Befehl) und ignoriert physikalische Latenzen oder den von-Neumann-Flaschenhals.'],
+        requiredKeywords: [['idealis', 'theoret'], ['takt', 'zeit'], ['latenz', 'flaschenhals', 'physikalisch']]
+    },
+    {
+        question: 'Welche Schritte werden durchlaufen, damit ein Java-Programm ausgeführt werden kann?',
+        correctAnswers: ['Quellcode (.java) wird vom Compiler (javac) in Bytecode (.class) übersetzt. Die JVM lädt den Bytecode. Die JVM interpretiert oder kompiliert via JIT in Maschinencode.'],
+        requiredKeywords: [['compiler', 'javac'], ['bytecode', '.class'], ['jvm'], ['jit', 'interpret', 'maschinencode']]
+    },
+    {
+        question: 'Welche Schritte werden durchlaufen, um einen einzelnen Maschinenbefehl auszuführen?',
+        correctAnswers: ['Fetch: Befehl holen. Decode: Befehl interpretieren. Fetch Operands: Daten laden. Execute: Operation ausführen. Write Back: Ergebnis zurückschreiben.'],
+        requiredKeywords: [['fetch'], ['decode'], ['execute'], ['write back', 'zurückschreib']]
+    },
+    {
+        question: 'Wie viele Takte dauert die Ausführung eines einzelnen Maschinenbefehls?',
+        correctAnswers: ['Architekturabhängig. In idealisierten Modellen oft ein Takt. Real variiert es von weniger als einem Takt (durch Pipelining) bis zu hunderten Takten.'],
+        requiredKeywords: [['architektur', 'abhängig', 'variiert'], ['pipeline', 'ideal', 'takt']]
+    },
+    {
+        question: 'Suchen Sie 3 Befehle der x86-Architektur heraus.',
+        correctAnswers: ['MOV (Daten kopieren), ADD (Addieren), JMP (Springen zu einer Adresse).'],
+        requiredKeywords: [['mov'], ['add'], ['jmp']]
+    },
+    {
+        question: 'Führen Sie folgendes Programm mit dem Adventskalender-Beispiel aus der Vorlesung durch.',
+        correctAnswers: ['R1 erhält 17, R2 erhält 13. Addition: 17+13=30 wird ausgegeben. Multiplikation: 17*13=221 wird ausgegeben.'],
+        requiredKeywords: [['17'], ['13'], ['30'], ['221']]
+    },
+    {
+        question: 'Welche Probleme kann es geben, wenn auf einem System mehrere Programme gleichzeitig laufen sollen?',
+        correctAnswers: ['Race Conditions, gegenseitiges Überschreiben von Speicherbereichen, Deadlocks und Ressourcenkonflikte.'],
+        requiredKeywords: [['race condition', 'wettlauf'], ['deadlock', 'verklemmung'], ['speicher', 'ressource', 'überschreib']]
+    },
+    {
+        question: 'Was ist die Aufgabe von Betriebssystemen?',
+        correctAnswers: ['Sie verwalten Hardware-Ressourcen (CPU, Speicher, I/O), koordinieren die Programmausführung (Scheduling) und stellen eine abstrakte Schnittstelle (API) bereit.'],
+        requiredKeywords: [['hardware', 'ressource', 'verwalt'], ['scheduling', 'koordin'], ['api', 'schnittstelle']]
+    },
+    {
+        question: 'Was besagt das Highlander-Prinzip?',
+        correctAnswers: ['Es kann nur einen geben: Zu jedem Zeitpunkt darf nur eine Instanz (das Betriebssystem) die uneingeschränkte Kontrolle über kritische Hardware-Ressourcen haben.'],
+        requiredKeywords: [['nur ein', 'eine instanz'], ['kontrolle'], ['hardware', 'ressource', 'betriebssystem']]
+    },
+    {
+        question: 'Warum muss für Betriebssysteme das Highlander-Prinzip gelten?',
+        correctAnswers: ['Um Konsistenz und Sicherheit zu gewährleisten. Unkoordinierter Zugriff mehrerer Instanzen würde zu Datenkorruption und Systemabstürzen führen.'],
+        requiredKeywords: [['konsistenz', 'sicherheit'], ['korruption', 'absturz', 'unkoordiniert']]
+    },
+    {
+        question: 'Geben Sie drei Beispiele für Software-Betriebsmittel.',
+        correctAnswers: ['Dateien (Dateisystem), Sockets (Netzwerkverbindungen), Semaphoren (Synchronisationsobjekte).'],
+        requiredKeywords: [['datei'], ['socket', 'netzwerk'], ['semaphor', 'synchron']]
+    },
+    {
+        question: 'Warum ist die CPU ein entziehbares und exklusives Betriebsmittel?',
+        correctAnswers: ['Exklusiv: Ein CPU-Kern kann zu einem Zeitpunkt nur einen Befehlsstrom verarbeiten. Entziehbar: Der Zustand kann gespeichert und die CPU einem anderen Prozess zugewiesen werden (Context Switch).'],
+        requiredKeywords: [['exklusiv', 'ein', 'zeitpunkt'], ['entziehbar', 'context switch', 'gespeichert']]
+    },
+    {
+        question: 'Warum muss das Betriebssystem vor Anwendungssoftware abgeschottet werden?',
+        correctAnswers: ['Zum Schutz der Systemstabilität. Fehlerhafte oder böswillige Anwendungen dürfen keine kritischen Systemstrukturen überschreiben oder die Kontrolle übernehmen.'],
+        requiredKeywords: [['schutz', 'stabilität'], ['fehlerhaft', 'böswillig'], ['überschreib', 'kontrolle']]
+    },
+    {
+        question: 'Warum müssen Anwendungen untereinander abgeschottet werden?',
+        correctAnswers: ['Zum Datenschutz und zur Fehlerisolation. Ein Absturz oder Fehler in Anwendung A darf Anwendung B nicht beeinflussen oder deren Daten lesen.'],
+        requiredKeywords: [['datenschutz', 'isolation'], ['absturz', 'fehler'], ['beeinfluss', 'lesen']]
+    },
+    {
+        question: 'Warum werden die Befehle (MOV, ADD, JMP) im User- bzw. Kernelmodus ausgeführt?',
+        correctAnswers: ['Befehle wie ADD oder MOV sind unkritisch und laufen im User-Mode. Nur Befehle die in Hardware eingreifen müssen im privilegierten Kernel-Mode laufen.'],
+        requiredKeywords: [['user', 'unkritisch'], ['kernel', 'privileg'], ['hardware', 'eingreif']]
+    },
+    {
+        question: 'Warum ist eine Trennung zwischen User- und Kernelmodus ohne Hilfe der Hardware nicht möglich?',
+        correctAnswers: ['Software kann sich nicht selbst kontrollieren. Es braucht hardwareseitige Durchsetzung (Mode-Bit in CPU), das bei unberechtigten Zugriffen eine Exception auslöst.'],
+        requiredKeywords: [['hardware', 'durchsetz'], ['mode-bit', 'cpu'], ['exception', 'selbst kontroll']]
+    },
+    
+    // Betriebssystem-Arten und Strukturen
+    {
+        question: 'Was unterscheidet ein Singletasking- von einem Multitasking-System?',
+        correctAnswers: ['Singletasking kann nur einen Prozess gleichzeitig ausführen. Multitasking hält mehrere Prozesse im Speicher und führt diese quasi-parallel oder parallel aus.'],
+        requiredKeywords: [['singletasking', 'ein'], ['multitasking', 'mehrere'], ['parallel', 'gleichzeitig']]
+    },
+    {
+        question: 'Ist Multiprocessing mit Einprozessorsystemen möglich?',
+        correctAnswers: ['Nein. Multiprocessing erfordert mehrere physische CPUs oder Kerne für echte Parallelität auf Hardwareebene.'],
+        requiredKeywords: [['nein'], ['mehrere', 'physisch'], ['cpu', 'kern', 'parallel']]
+    },
+    {
+        question: 'Ist Multitasking mit einem Multiuser-System möglich?',
+        correctAnswers: ['Ja, es ist sogar notwendig. Damit mehrere Benutzer gleichzeitig arbeiten können, muss das System deren Programme gleichzeitig verwalten.'],
+        requiredKeywords: [['ja'], ['mehrere benutzer', 'multiuser'], ['gleichzeitig', 'verwalten']]
+    },
+    {
+        question: 'Was unterscheidet Singleprocessing von Singletasking?',
+        correctAnswers: ['Singleprocessing bezieht sich auf die Hardware (nur eine CPU). Singletasking bezieht sich auf das Betriebssystem (nur ein Programm gleichzeitig).'],
+        requiredKeywords: [['singleprocessing', 'hardware', 'cpu'], ['singletasking', 'betriebssystem', 'software', 'programm']]
+    },
+    {
+        question: 'Ist Nebenläufigkeit auf Einprozessorsystemen möglich?',
+        correctAnswers: ['Ja, durch Pseudo-Parallelität. Der Prozessor schaltet so schnell zwischen Prozessen hin und her (Scheduling), dass es wie Gleichzeitigkeit wirkt.'],
+        requiredKeywords: [['ja'], ['pseudo', 'scheduling', 'wechsel'], ['gleichzeitig', 'parallel']]
+    },
+    {
+        question: 'Welche Betriebsarten sollte ein Betriebssystem für Cloud-Rechner unterstützen?',
+        correctAnswers: ['Stapelverarbeitung (Batch), Teilnehmerbetrieb (Time-Sharing), verteiltes Rechnen und Virtualisierung.'],
+        requiredKeywords: [['batch', 'stapel'], ['time-sharing', 'teilnehmer'], ['virtualisierung']]
+    },
+    {
+        question: 'Warum kann es kein perfektes Betriebssystem geben?',
+        correctAnswers: ['Weil Ziele in Konflikt stehen: Sicherheit vs. Bequemlichkeit, Durchsatz vs. Antwortzeit. Man muss immer Kompromisse (Trade-offs) eingehen.'],
+        requiredKeywords: [['konflikt', 'ziele'], ['kompromiss', 'trade-off']]
+    },
+    {
+        question: 'Was bedeutet es für ein Betriebssystem, Echtzeitanforderungen zu genügen?',
+        correctAnswers: ['Es muss garantieren, dass kritische Aufgaben innerhalb eines definierten Zeitintervalls abgeschlossen sind (Determinismus).'],
+        requiredKeywords: [['garantier', 'zeitintervall'], ['determinismus', 'kritisch']]
+    },
+    {
+        question: 'Was sind Vorteile eines schichtenorientierten Kernels?',
+        correctAnswers: ['Modularität, einfachere Wartung und Debugging, definierte Schnittstellen zwischen den Schichten.'],
+        requiredKeywords: [['modular'], ['wartung', 'debugging'], ['schnittstelle', 'schicht']]
+    },
+    {
+        question: 'Warum sind viele bekannte Betriebssysteme im Kern monolithisch strukturiert?',
+        correctAnswers: ['Wegen der Performance. Weniger Kontextwechsel und direktere Kommunikation sorgen für höhere Geschwindigkeit.'],
+        requiredKeywords: [['performance', 'geschwindigkeit'], ['kontextwechsel', 'kommunikation', 'direkt']]
+    },
+    {
+        question: 'Erklären Sie, was einen Mikrokernel auszeichnet.',
+        correctAnswers: ['Nur die nötigsten Funktionen (Scheduling, IPC) laufen im Kernel-Modus. Treiber und Dateisysteme laufen im User-Modus. Vorteil: Stabilität. Nachteil: Performance-Overhead.'],
+        requiredKeywords: [['scheduling', 'ipc', 'minimal'], ['user-modus', 'treiber'], ['stabilität', 'overhead']]
+    },
+    {
+        question: 'In welchem Kontext könnten Typ-1-Hypervisor sinnvoll sein?',
+        correctAnswers: ['In Rechenzentren und Cloud-Umgebungen (AWS, Azure), wo maximale Effizienz und direkte Hardwarekontrolle ohne Host-Betriebssystem benötigt werden.'],
+        requiredKeywords: [['rechenzentrum', 'cloud', 'aws', 'azure'], ['direkt', 'hardware'], ['effizienz']]
+    },
+    {
+        question: 'Warum sind kritische Befehle kritisch?',
+        correctAnswers: ['Weil sie globale Auswirkungen auf das System haben (Hardwarezugriff, Speicherverwaltung) und bei Missbrauch die Stabilität oder Sicherheit gefährden.'],
+        requiredKeywords: [['global', 'auswirkung'], ['hardware', 'speicher'], ['stabilität', 'sicherheit', 'missbrauch']]
+    },
+    {
+        question: 'Begründen Sie, ob der HALT-Befehl ein kritischer Befehl ist.',
+        correctAnswers: ['Ja, er ist kritisch. Er stoppt den Prozessor. Ein Nutzerprogramm könnte das gesamte System für alle lahmlegen (Denial of Service).'],
+        requiredKeywords: [['ja', 'kritisch'], ['halt', 'stoppt', 'prozessor'], ['denial of service', 'lahmlegen', 'system']]
+    },
+    {
+        question: 'Was spricht für Virtualisierung, was dagegen?',
+        correctAnswers: ['Dafür: Konsolidierung, Isolation (Sicherheit), einfache Migration/Snapshots. Dagegen: Performance-Overhead.'],
+        requiredKeywords: [['konsolidierung', 'isolation', 'migration', 'snapshot'], ['overhead', 'performance']]
+    },
+    
+    // Polling und Interrupts
+    {
+        question: 'Was ist Polling?',
+        correctAnswers: ['Aktives, zyklisches Abfragen eines Status durch die CPU, um festzustellen, ob Arbeit anliegt.'],
+        requiredKeywords: [['aktiv', 'zyklisch', 'abfragen'], ['cpu', 'status']]
+    },
+    {
+        question: 'Nennen Sie Situationen im echten Leben für Polling bzw. Interrupting.',
+        correctAnswers: ['Polling: Ständiges Schauen in den Briefkasten. Interrupting: Warten bis das Telefon klingelt.'],
+        requiredKeywords: [['polling', 'briefkasten', 'schauen'], ['interrupt', 'telefon', 'klingel']]
+    },
+    {
+        question: 'Warum ist Interrupting auf modernen Mehrzwecksystemen zu bevorzugen?',
+        correctAnswers: ['Die CPU wird nicht durch sinnloses Warten (Busy Waiting) blockiert und kann während der Wartezeit nützliche Prozesse ausführen.'],
+        requiredKeywords: [['busy waiting', 'warten'], ['cpu', 'prozesse', 'nützlich']]
+    },
+    {
+        question: 'Nennen Sie 2 asynchrone und 2 synchrone Interrupts.',
+        correctAnswers: ['Asynchron: Mausklick, Netzwerkpaket. Synchron: Division durch Null, Page Fault.'],
+        requiredKeywords: [['asynchron', 'maus', 'netzwerk'], ['synchron', 'division', 'page fault', 'exception']]
+    },
+    {
+        question: 'Warum sind Interrupts teuer?',
+        correctAnswers: ['Wegen des Kontextwechsels: Register und Program Counter müssen gesichert, Pipeline geleert, Cache evtl. invalidiert und Handler geladen werden.'],
+        requiredKeywords: [['kontextwechsel'], ['register', 'program counter', 'pipeline', 'cache']]
+    },
+    {
+        question: 'Warum dürfen Interrupts nur im Kernel-Modus maskiert werden?',
+        correctAnswers: ['Damit Benutzerprogramme nicht wichtige Systemfunktionen blockieren und die CPU monopolisieren können.'],
+        requiredKeywords: [['kernel'], ['blockieren', 'monopol'], ['systemfunktion', 'benutzer']]
+    },
+    {
+        question: 'Warum muss die CPU den letzten Maschinenbefehl abarbeiten vor einem Interrupt?',
+        correctAnswers: ['Um einen konsistenten Zustand für die spätere Rückkehr zu garantieren.'],
+        requiredKeywords: [['konsistent', 'zustand'], ['rückkehr', 'garantier']]
+    },
+    {
+        question: 'Warum profitiert man bei der Interruptbehandlung von Hyperthreading?',
+        correctAnswers: ['Während ein Thread durch den Interrupt blockiert ist, kann der andere Hardware-Thread auf demselben Kern weiterrechnen.'],
+        requiredKeywords: [['thread'], ['blockiert', 'interrupt'], ['weiterrechnen', 'kern']]
+    },
+    {
+        question: 'Welcher Mechanismus bei Java ähnelt Interrupts?',
+        correctAnswers: ['Exceptions (Ausnahmebehandlung mit try-catch).'],
+        requiredKeywords: [['exception'], ['try', 'catch']]
+    },
+    {
+        question: 'Welchen Vorteil bieten System Calls?',
+        correctAnswers: ['Sie bieten einen kontrollierten Übergang vom User- in den Kernel-Modus, um privilegierte Funktionen sicher auszuführen.'],
+        requiredKeywords: [['kontrolliert', 'übergang'], ['user', 'kernel'], ['privileg', 'sicher']]
+    },
+    
+    // Prozesse und Threads
+    {
+        question: 'Was ist der Unterschied zwischen einem Programm und einem Prozess?',
+        correctAnswers: ['Ein Programm ist passiv (Code auf Festplatte). Ein Prozess ist aktiv (Programm in Ausführung im Arbeitsspeicher).'],
+        requiredKeywords: [['programm', 'passiv', 'festplatte'], ['prozess', 'aktiv', 'ausführung', 'speicher']]
+    },
+    {
+        question: 'Warum ist die Unterscheidung zwischen Programm und Prozess nützlich?',
+        correctAnswers: ['Dasselbe Programm kann mehrfach als unabhängige Prozesse gestartet werden, ohne sich gegenseitig zu stören.'],
+        requiredKeywords: [['mehrfach', 'unabhängig'], ['prozesse', 'stören']]
+    },
+    {
+        question: 'Welche Aufgabe erfüllt das Betriebssystem durch getrennte Adressräume?',
+        correctAnswers: ['Speicherschutz: Ein Prozess kann nicht in den Speicher eines anderen Prozesses schreiben.'],
+        requiredKeywords: [['speicherschutz'], ['prozess', 'schreiben', 'zugriff']]
+    },
+    {
+        question: 'Was ist die Prozesstabelle und was kann darin gespeichert werden?',
+        correctAnswers: ['Eine Datenstruktur des Kernels zur Verwaltung aller Prozesse. Inhalt: PCB mit PID, Prozesszustand, Program Counter, Register, Benutzer-ID.'],
+        requiredKeywords: [['datenstruktur', 'kernel'], ['pcb', 'pid'], ['zustand', 'register', 'program counter']]
+    },
+    {
+        question: 'Warum sind Prozesse Betriebsmittel?',
+        correctAnswers: ['Sie belegen physische Ressourcen wie Hauptspeicher, CPU-Zeit und Slots in der Prozesstabelle.'],
+        requiredKeywords: [['ressource', 'belegen'], ['speicher', 'cpu', 'prozesstabelle']]
+    },
+    {
+        question: 'Warum kann es nützlich sein, sich zu merken, ob Prozesse beendet wurden?',
+        correctAnswers: ['Damit der Elternprozess den Rückgabewert (Exit-Status) abfragen kann (Vermeidung von Zombies).'],
+        requiredKeywords: [['elternprozess', 'rückgabewert', 'exit'], ['zombie']]
+    },
+    {
+        question: 'Welches Problem kann bei nebenläufigen Threads eines Programms auftreten?',
+        correctAnswers: ['Race Conditions: Unkoordinierter Zugriff auf gemeinsame Daten führt zu inkonsistenten Ergebnissen.'],
+        requiredKeywords: [['race condition'], ['gemeinsam', 'daten'], ['inkonsistent']]
+    },
+    {
+        question: 'Wie kann ein OS ohne Thread-Support Threads ausführen?',
+        correctAnswers: ['Durch User-Level-Threads: Eine Bibliothek im User-Space managed das Scheduling. Für den Kernel sieht es aus wie ein einzelner Prozess.'],
+        requiredKeywords: [['user-level', 'bibliothek'], ['user-space', 'scheduling'], ['kernel', 'prozess']]
+    },
+    {
+        question: 'Was ist der Unterschied zwischen Prozessen und Threads?',
+        correctAnswers: ['Prozesse haben eigene, isolierte Speicherbereiche (schwergewichtig). Threads teilen sich den Speicher innerhalb eines Prozesses (leichtgewichtig).'],
+        requiredKeywords: [['prozess', 'isoliert', 'schwer'], ['thread', 'teilen', 'leicht']]
+    },
+    
+    // Scheduling
+    {
+        question: 'Was bedeutet Scheduling? Geben Sie ein Beispiel.',
+        correctAnswers: ['Die Strategie, nach der das Betriebssystem entscheidet, welcher Prozess als nächstes die CPU bekommt. Beispiel: Drucker-Warteschlange.'],
+        requiredKeywords: [['strategie', 'entscheid'], ['cpu', 'prozess'], ['beispiel', 'warteschlange', 'drucker']]
+    },
+    {
+        question: 'Nennen Sie drei Scheduling-Kriterien.',
+        correctAnswers: ['Fairness (jeder kommt dran), Durchsatz (möglichst viele Jobs), Priorität (wichtige Jobs zuerst).'],
+        requiredKeywords: [['fairness'], ['durchsatz'], ['priorität']]
+    },
+    {
+        question: 'Welcher Konflikt kann zwischen Scheduling-Kriterien entstehen?',
+        correctAnswers: ['Fairness vs. Priorität: Wenn wichtige Jobs immer vorgezogen werden, verhungern unwichtige Jobs (Starvation).'],
+        requiredKeywords: [['fairness', 'priorität'], ['verhungern', 'starvation']]
+    },
+    {
+        question: 'Welches Scheduling-Verfahren eignet sich für rechenlastige Prozesse?',
+        correctAnswers: ['FCFS oder SPN mit langen Zeitscheiben, um den Overhead durch Kontextwechsel zu minimieren.'],
+        requiredKeywords: [['fcfs', 'spn'], ['zeitscheibe', 'lang'], ['kontextwechsel', 'overhead']]
+    },
+    {
+        question: 'Was ist der Unterschied zwischen verdrängendem und nicht-verdrängendem Scheduling?',
+        correctAnswers: ['Nicht-verdrängend: Prozess behält CPU bis er fertig ist. Verdrängend: OS kann Prozess die CPU jederzeit entziehen.'],
+        requiredKeywords: [['nicht-verdrängend', 'fertig', 'behält'], ['verdrängend', 'entziehen', 'jederzeit']]
+    },
+    {
+        question: 'Warum ist verdrängendes Scheduling teurer?',
+        correctAnswers: ['Wegen des häufigeren Kontextwechsel-Overheads (Register speichern, Cache-Verlust).'],
+        requiredKeywords: [['kontextwechsel', 'overhead'], ['register', 'cache']]
+    },
+    {
+        question: 'Welche Betriebsarten werden durch verdrängendes Scheduling möglich?',
+        correctAnswers: ['Multitasking (Time-Sharing) und Echtzeitbetrieb.'],
+        requiredKeywords: [['multitasking', 'time-sharing'], ['echtzeit']]
+    },
+    {
+        question: 'Vergleichen Sie Round Robin und FCFS.',
+        correctAnswers: ['Round Robin: Fair, gute Antwortzeit, aber Overhead bei vielen Prozessen. FCFS: Einfach, wenig Overhead, aber Convoy Effect und schlechte Antwortzeit.'],
+        requiredKeywords: [['round robin', 'fair', 'antwortzeit'], ['fcfs', 'einfach', 'convoy']]
+    },
+    {
+        question: 'Nennen Sie Scheduling-Beispiele aus dem Alltag.',
+        correctAnswers: ['FCFS: Kasse im Supermarkt. Priorität: Notaufnahme im Krankenhaus. Round Robin: Tapas-Essen.'],
+        requiredKeywords: [['fcfs', 'supermarkt', 'kasse'], ['priorität', 'notaufnahme', 'krankenhaus']]
+    },
+    {
+        question: 'Was sind Vor- und Nachteile variabler Quantumslängen bei Round Robin?',
+        correctAnswers: ['Vorteil: Dynamische Anpassung für I/O und CPU-Prozesse. Nachteil: Komplexere Berechnung.'],
+        requiredKeywords: [['vorteil', 'dynamisch', 'anpassung'], ['nachteil', 'komplex']]
+    },
+    {
+        question: 'Was bedeutet Verhungern (Starvation) beim Scheduling?',
+        correctAnswers: ['Ein Prozess mit niedriger Priorität bekommt niemals CPU-Zeit, weil ständig höher priorisierte Prozesse nachkommen.'],
+        requiredKeywords: [['niedrig', 'priorität'], ['niemals', 'cpu'], ['höher', 'priorisiert']]
+    },
+    
+    // Speicherverwaltung
+    {
+        question: 'Erklären Sie Lokalität im echten Leben (räumlich und zeitlich).',
+        correctAnswers: ['Räumlich: Wer kocht, hat Salz, Messer und Brett nebeneinander. Zeitlich: Wer heute die Kaffeemaschine benutzt, benutzt sie morgen wieder.'],
+        requiredKeywords: [['räumlich', 'nebeneinander', 'koch'], ['zeitlich', 'morgen', 'wieder']]
+    },
+    {
+        question: 'Was ist der Unterschied zwischen logischen und physischen Adressen?',
+        correctAnswers: ['Logische Adressen sind abstrakt (starten bei 0). Physische sind die echten RAM-Zellen. Vorteil: Programmierer muss sich nicht um Fragmentierung kümmern.'],
+        requiredKeywords: [['logisch', 'abstrakt'], ['physisch', 'ram'], ['fragmentierung', 'vorteil']]
+    },
+    {
+        question: 'Was ist die Hauptaufgabe bei der Speicherverwaltung?',
+        correctAnswers: ['Zuweisung von Speicher an Prozesse, Rückforderung, Adressübersetzung und Isolation (Schutz) der Speicherbereiche.'],
+        requiredKeywords: [['zuweisung', 'speicher'], ['adressübersetzung'], ['isolation', 'schutz']]
+    },
+    {
+        question: 'Was ist der Unterschied zwischen festen und dynamischen Partitionen?',
+        correctAnswers: ['Fest: Statische Blöcke, einfach, aber interne Fragmentierung. Dynamisch: Genau passend, flexibel, aber externe Fragmentierung.'],
+        requiredKeywords: [['fest', 'statisch', 'intern'], ['dynamisch', 'flexibel', 'extern']]
+    },
+    {
+        question: 'Welches Problem tritt bei der Speicherverwaltung auf und warum ist es unvermeidbar?',
+        correctAnswers: ['Fragmentierung (Zerstückelung des freien Speichers). Unvermeidbar, da Prozesse unterschiedliche Größen und Lebensdauern haben.'],
+        requiredKeywords: [['fragmentierung', 'zerstückelung'], ['größe', 'lebensdauer', 'unvermeidbar']]
+    },
+    {
+        question: 'Wie kümmern sich moderne OS um Fragmentierung?',
+        correctAnswers: ['Durch Paging (Seitenadressierung). Der Speicher wird in gleich große Kacheln (Frames/Pages) unterteilt.'],
+        requiredKeywords: [['paging', 'seite'], ['kachel', 'frame', 'page'], ['gleich groß']]
+    },
+    {
+        question: 'Was sind Vor- und Nachteile von virtuellem Speicher?',
+        correctAnswers: ['Vorteil: Speicher kann größer sein als RAM (Swap), Isolation. Nachteil: Overhead durch Adressübersetzung, Thrashing bei zu viel Paging.'],
+        requiredKeywords: [['vorteil', 'größer', 'ram', 'swap'], ['nachteil', 'overhead', 'thrashing']]
+    },
+    {
+        question: 'Was passiert wenn die Page-Größe zu klein oder zu groß ist?',
+        correctAnswers: ['Zu klein: Seitentabelle wird riesig. Zu groß: Interne Fragmentierung wächst.'],
+        requiredKeywords: [['zu klein', 'seitentabelle', 'riesig'], ['zu groß', 'intern', 'fragmentierung']]
+    },
+    {
+        question: 'Wie funktioniert Adressübersetzung mit Seitentabelle und MMU?',
+        correctAnswers: ['Logische Adresse wird in Page Number und Offset geteilt. Tabelle liefert Frame Number. MMU nötig, weil Software-Lookup zu langsam wäre.'],
+        requiredKeywords: [['page number', 'offset'], ['frame', 'tabelle'], ['mmu', 'langsam']]
+    },
+    {
+        question: 'Was ist ein Page Fault?',
+        correctAnswers: ['Ein Interrupt, der auftritt wenn auf eine Seite zugegriffen wird, die nicht im physischen RAM liegt (sondern auf der Festplatte).'],
+        requiredKeywords: [['interrupt'], ['seite', 'page'], ['ram', 'festplatte']]
+    },
+    {
+        question: 'Was ist die Laufzeit von Best-Fit und First-Fit?',
+        correctAnswers: ['Best-Fit Worst Case: Muss ganze Liste durchsuchen O(N). First-Fit Best Case: Findet sofort den ersten Block O(1).'],
+        requiredKeywords: [['best-fit', 'o(n)', 'liste'], ['first-fit', 'o(1)', 'erst']]
+    },
+    {
+        question: 'Warum ist das optimale Seitenersetzungsverfahren optimal?',
+        correctAnswers: ['Es ersetzt die Seite, die am längsten in der Zukunft nicht benötigt wird. Das minimiert die Fehlerrate (Belady).'],
+        requiredKeywords: [['längsten', 'zukunft'], ['minimiert', 'fehlerrate', 'belady']]
+    },
+    {
+        question: 'Nennen Sie eine weitere Replacement Strategie neben LRU und FIFO.',
+        correctAnswers: ['Random (zufällige Seite) oder Clock-Algorithmus (Annäherung an LRU).'],
+        requiredKeywords: [['random', 'zufällig'], ['clock', 'lru']]
+    },
+    {
+        question: 'Wo begegnen Ihnen Online-Probleme im Alltag?',
+        correctAnswers: ['Börsenhandel, Routing im Verkehr (Stauprognose), Caching im Webbrowser.'],
+        requiredKeywords: [['börse', 'aktie'], ['routing', 'verkehr', 'stau'], ['caching', 'browser']]
+    },
+    
+    // Treiber und Dateisysteme
+    {
+        question: 'Was sind Vor- und Nachteile von Treibern?',
+        correctAnswers: ['Vorteil: Abstraktion und einheitliche Schnittstelle. Nachteil: Laufen oft im Kernel-Mode, fehlerhafter Treiber bringt System zum Absturz.'],
+        requiredKeywords: [['vorteil', 'abstraktion', 'schnittstelle'], ['nachteil', 'kernel', 'absturz']]
+    },
+    {
+        question: 'Nennen Sie Beispiele für externe Geräte und Treiber.',
+        correctAnswers: ['Grafikkarte (Nvidia-Treiber), Drucker (Druckertreiber), Netzwerkkarte (NIC-Treiber).'],
+        requiredKeywords: [['grafikkarte', 'nvidia'], ['drucker'], ['netzwerkkarte', 'nic']]
+    },
+    {
+        question: 'Wie funktioniert Memory Mapping?',
+        correctAnswers: ['Geräteregister werden in den physischen Adressraum eingeblendet. Die CPU schreibt an eine Speicheradresse und die Hardware interpretiert dies als Befehl.'],
+        requiredKeywords: [['geräteregister', 'adressraum'], ['cpu', 'schreibt'], ['hardware', 'befehl']]
+    },
+    {
+        question: 'Sollte ein OS nur ein Dateisystem unterstützen?',
+        correctAnswers: ['Nein. FAT32 für Austauschbarkeit (USB-Sticks), NTFS/ext4 für Sicherheit/Journaling, ISO9660 für CDs.'],
+        requiredKeywords: [['nein'], ['fat32', 'usb'], ['ntfs', 'ext4', 'journal']]
+    },
+    {
+        question: 'Beschreiben Sie den Zugriff auf eine Datei.',
+        correctAnswers: ['Anwendung ruft open() auf, Dateisystem prüft Rechte und sucht Speicherort (Inode/FAT), Treiber steuert Festplatte an, Daten werden in Puffer und dann in Anwendungsspeicher kopiert.'],
+        requiredKeywords: [['open', 'anwendung'], ['inode', 'fat', 'dateisystem'], ['treiber', 'festplatte'], ['puffer', 'speicher']]
+    }
+];
+
 // Game State
-let gameMode = null; // 'osi-layer', 'osi-props', 'general', oder 'brain'
+let gameMode = null; // 'osi-layer', 'osi-props', 'general', 'ralph', oder 'brain'
 let currentLayer = 0;
 let attempts = 0;
 let deaths = 0;
@@ -341,6 +772,7 @@ const elements = {
     osiLayerBtn: null,
     osiPropsBtn: null,
     generalModeBtn: null,
+    ralphModeBtn: null,
     brainModeBtn: null,
     brainDescription: null,
     answerInput: null,
@@ -365,6 +797,7 @@ function initGame() {
     elements.osiLayerBtn = document.getElementById('osiLayerBtn');
     elements.osiPropsBtn = document.getElementById('osiPropsBtn');
     elements.generalModeBtn = document.getElementById('generalModeBtn');
+    elements.ralphModeBtn = document.getElementById('ralphModeBtn');
     elements.brainModeBtn = document.getElementById('brainModeBtn');
     elements.brainDescription = document.getElementById('brainDescription');
     elements.answerInput = document.getElementById('answerInput');
@@ -384,6 +817,7 @@ function initGame() {
     elements.osiLayerBtn.addEventListener('click', () => startGame('osi-layer'));
     elements.osiPropsBtn.addEventListener('click', () => startGame('osi-props'));
     elements.generalModeBtn.addEventListener('click', () => startGame('general'));
+    elements.ralphModeBtn.addEventListener('click', () => startGame('ralph'));
     elements.brainModeBtn.addEventListener('click', () => startGame('brain'));
     
     // Event listeners for game
@@ -432,10 +866,17 @@ function startGame(mode) {
         elements.storyText.textContent = 'Jakubasch grinst hämisch: "Zeit für einen echten Test! Beantworte meine Fragen, wenn du kannst!"';
         elements.bossImage.src = 'images/Jaku.jpg';
         elements.bossName.textContent = 'JAKUBASCH - Der Prüfungsdämon';
+    } else if (mode === 'ralph') {
+        // Ralph mode - Rechnerarchitektur & Betriebssysteme
+        currentQuestions = shuffleArray([...ralphQuestions]);
+        elements.storyText.textContent = 'Radmacher Ralph erscheint: "HAHA! Glaubst du, du kennst die von-Neumann-Architektur? Zeig mir was du drauf hast!"';
+        elements.bossImage.src = 'images/Ralph.jpg';
+        elements.bossName.textContent = 'RADMACHER RALPH - Der Hardware-Dämon';
     } else if (mode === 'brain') {
-        // Brain mode - nur schwierige Fragen
+        // Brain mode - nur schwierige Fragen von ALLEN Bossen
+        const allQuestions = [...generalQuestions, ...ralphQuestions];
         brainQuestions = Array.from(wrongQuestions.keys()).map(questionText => {
-            return generalQuestions.find(q => q.question === questionText);
+            return allQuestions.find(q => q.question === questionText);
         }).filter(q => q !== undefined);
         currentQuestions = [...brainQuestions];
         brainStreaks.clear();
@@ -534,7 +975,7 @@ function isAnswerCorrect(answer) {
         correctAnswers.push('schicht ' + layerNumber);
         
         return correctAnswers.some(correct => answer.includes(correct.toLowerCase()));
-    } else if (gameMode === 'general' || gameMode === 'brain') {
+    } else if (gameMode === 'general' || gameMode === 'ralph' || gameMode === 'brain') {
         const currentQ = currentQuestions[currentQuestionIndex];
         
         // Prüfe ob requiredKeywords definiert sind
@@ -619,7 +1060,7 @@ function handleWrongAnswer() {
     updateHeartsDisplay();
     
     // Track wrong question (außer im OSI-Modus)
-    if (gameMode === 'general') {
+    if (gameMode === 'general' || gameMode === 'ralph') {
         const currentQ = currentQuestions[currentQuestionIndex];
         const wrongCount = wrongQuestions.get(currentQ.question) || 0;
         wrongQuestions.set(currentQ.question, wrongCount + 1);
@@ -775,6 +1216,8 @@ function resetQuestionsAndLives() {
         currentQuestions = shuffleArray([...osiLayers]);
     } else if (gameMode === 'general') {
         currentQuestions = shuffleArray([...generalQuestions]);
+    } else if (gameMode === 'ralph') {
+        currentQuestions = shuffleArray([...ralphQuestions]);
     } else if (gameMode === 'brain') {
         currentQuestions = shuffleArray([...currentQuestions.map(q => ({...q}))]);
     }
@@ -804,6 +1247,8 @@ function resetGame() {
         currentQuestions = shuffleArray([...osiLayers]);
     } else if (gameMode === 'general') {
         currentQuestions = shuffleArray([...generalQuestions]);
+    } else if (gameMode === 'ralph') {
+        currentQuestions = shuffleArray([...ralphQuestions]);
     }
     
     updateBossHealth();
@@ -834,6 +1279,8 @@ function updateQuestion() {
             </span>
         `;
     } else if (gameMode === 'general') {
+        elements.question.textContent = `Frage ${currentQuestionIndex + 1}/${currentQuestions.length}: ${currentQuestions[currentQuestionIndex].question}`;
+    } else if (gameMode === 'ralph') {
         elements.question.textContent = `Frage ${currentQuestionIndex + 1}/${currentQuestions.length}: ${currentQuestions[currentQuestionIndex].question}`;
     } else if (gameMode === 'brain') {
         const currentQ = currentQuestions[currentQuestionIndex];

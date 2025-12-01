@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaku Quest: Die Schlacht gegen Jakubasch</title>
+    <title>Jaku Quest: Die Schlacht der Prüfungsdämonen</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="game-container">
-        <h1 class="title">⚔️ JAKU QUEST ⚔️</h1>
+        <h1 class="title">⚔️ PRÜFUNGS QUEST ⚔️</h1>
         
         <div id="startScreen" class="start-screen">
             <div class="story-text">
-                Du betrittst den düsteren Prüfungssaal. Vor dir erhebt sich Jakubasch, der gefürchtete Prüfungsdämon! 
-                Er lacht höhnisch: "HAHAHA! Ein weiterer Student? Wähle deinen Kampfmodus!"
+                Du betrittst den düsteren Prüfungssaal. Zwei mächtige Prüfungsdämonen erwarten dich! 
+                Wähle deinen Gegner und Kampfmodus!
+            </div>
+            
+            <!-- JAKUBASCH SEKTION -->
+            <div class="boss-selection-header">
+                <img src="images/Jaku.jpg" alt="Jakubasch" class="boss-preview">
+                <span>⚔️ JAKUBASCH - Netzwerke</span>
             </div>
             
             <div class="mode-selection">
@@ -28,10 +34,31 @@
                 </button>
                 
                 <button class="button mode-button" id="generalModeBtn">
-                    🎯 Allgemeine Fragen<br>
+                    🎯 Allgemeine Netzwerk-Fragen<br>
                     <span class="mode-description">Teste dein Wissen mit zufälligen Fragen</span>
                 </button>
-                
+            </div>
+            
+            <!-- RADMACHER RALPH SEKTION -->
+            <div class="boss-selection-header ralph-header">
+                <img src="images/Ralph.jpg" alt="Radmacher Ralph" class="boss-preview">
+                <span>🔧 RADMACHER RALPH - Rechnerarchitektur</span>
+            </div>
+            
+            <div class="mode-selection">
+                <button class="button mode-button ralph-button" id="ralphModeBtn">
+                    💻 Rechnerarchitektur & Betriebssysteme<br>
+                    <span class="mode-description">Von-Neumann, CPU, OS und mehr!</span>
+                </button>
+            </div>
+            
+            <!-- SMOOTHBRAIN SEKTION -->
+            <div class="boss-selection-header brain-header">
+                <img src="images/Brain.jpg" alt="Smoothbrain" class="boss-preview">
+                <span>🧠 SMOOTHBRAIN - Deine Fehler</span>
+            </div>
+            
+            <div class="mode-selection">
                 <button class="button mode-button brain-button" id="brainModeBtn">
                     🧠 SMOOTHBRAIN - Dein Hirn HAHA!<br>
                     <span class="mode-description" id="brainDescription">Keine schwierigen Fragen vorhanden</span>
