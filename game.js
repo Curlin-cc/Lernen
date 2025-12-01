@@ -415,9 +415,9 @@ function startGame(mode) {
     
     // Prepare questions based on mode
     if (mode === 'osi-layer') {
-        // OSI Layer-Nummern: "Was ist Layer 1, 2, 3...?"
-        currentQuestions = shuffleArray([...osiLayers]);
-        elements.storyText.textContent = 'Jakubasch brüllt: "Nenne mir die OSI-Schichten! Was ist Layer 1? Layer 2? ..."';
+        // OSI Layer-Nummern: Von 1-7 in richtiger Reihenfolge aufzählen
+        currentQuestions = [...osiLayers]; // KEINE Randomisierung - feste Reihenfolge 1-7
+        elements.storyText.textContent = 'Jakubasch brüllt: "Nenne mir die OSI-Schichten der Reihe nach! Von Layer 1 bis Layer 7!"';
         elements.bossImage.src = 'images/Jaku.jpg';
         elements.bossName.textContent = 'JAKUBASCH - Der Prüfungsdämon';
     } else if (mode === 'osi-props') {
@@ -767,7 +767,15 @@ function resetQuestionsAndLives() {
     currentQuestionIndex = 0;
     
     // Re-shuffle questions based on mode
-    if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
+    if (gameMode === 'osi-layer') {
+        // OSI Layer-Nummern: feste Reihenfolge 1-7
+        currentQuestions = [...osiLayers];
+        // Reset all layer markers
+        for (let i = 1; i <= 7; i++) {
+            document.getElementById(`layer${i}`).classList.remove('correct');
+        }
+    } else if (gameMode === 'osi-props') {
+        // OSI Eigenschaften: zufällige Reihenfolge
         currentQuestions = shuffleArray([...osiLayers]);
         // Reset all layer markers
         for (let i = 1; i <= 7; i++) {
