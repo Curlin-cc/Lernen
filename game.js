@@ -107,8 +107,8 @@ const generalQuestions = [
     },
     {
         question: 'Wie ist eine Ethernet-Adresse (MAC-Adresse) aufgebaut? Wie wird Eindeutigkeit gewährleistet?',
-        correctAnswers: ['MAC Adressen bestehen aus sechsmal zwei hexadezimalen Oktetten. Die ersten drei Oktette stammen vom Hersteller und sichern die globale Eindeutigkeit. Kommunikation erfolgt im lokalen Netzwerk'],
-        requiredKeywords: [['6', 'sechs', 'oktett'], ['hersteller'], ['eindeutig', 'lokal']]
+        correctAnswers: ['48 Bit, Hexadezimal. Die ersten 24 Bit sind die Herstellerkennung. Die IEEE garantiert die Einmaligkeit.'],
+        requiredKeywords: [['48', 'bit'], ['hexadezimal', 'hex'], ['hersteller', '24'], ['ieee', 'einmalig', 'eindeutig']]
     },
     {
         question: 'Beschreiben Sie den Aufbau und die Funktionsweise eines Ethernet-Switch.',
