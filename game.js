@@ -763,7 +763,7 @@ const MAX_LIVES = 5;
 let wrongQuestions = new Map(); // Speichert falsche Fragen und wie oft sie falsch waren
 let brainQuestions = []; // Die aktuellen Brain-Challenge Fragen
 let brainStreaks = new Map(); // Zählt korrekte Antworten in Folge (muss 3 sein)
-let brainBossHealth = 0;
+let brainBossTotalHealth = 0; // Gesamtzahl der Fragen zu Beginn
 
 // DOM Elements
 const elements = {
@@ -886,7 +886,7 @@ function startGame(mode) {
         currentQuestions = [...brainQuestions];
         brainStreaks.clear();
         brainQuestions.forEach(q => brainStreaks.set(q.question, 0));
-        brainBossHealth = brainQuestions.length;
+        brainBossTotalHealth = brainQuestions.length;
         elements.storyText.innerHTML = 'Ein neuer Gegner erscheint: <strong>SMOOTHBRAIN</strong> - So sieht dein Hirn aus HAHA!<br>"Ich bin aus deinen Fehlern geboren! Du musst jede Frage 3 MAL HINTEREINANDER richtig beantworten, um mich zu besiegen!"';
         elements.bossImage.src = 'images/Brain.jpg';
         elements.bossName.textContent = 'SMOOTHBRAIN - Dein Hirn';
@@ -1004,20 +1004,28 @@ function handleCorrectAnswer() {
         // Brain mode: Erhöhe Streak
         const currentQ = currentQuestions[currentQuestionIndex];
         const currentStreak = brainStreaks.get(currentQ.question) || 0;
-        brainStreaks.set(currentQ.question, currentStreak + 1);
+        const newStreak = currentStreak + 1;
+        brainStreaks.set(currentQ.question, newStreak);
         
-        if (currentStreak + 1 >= 3) {
+        console.log(`Brain Mode: Frage "${currentQ.question.substring(0, 30)}..." - Streak: ${newStreak}/3`);
+        
+        if (newStreak >= 3) {
             // Frage gemeistert!
-            showMessage(`✅ GEMEISTERT! Diese Frage ${currentStreak + 1}x in Folge richtig! 🔥 Frage entfernt!`, 'success');
+            console.log('GEMEISTERT! Entferne Frage...');
+            showMessage(`✅ GEMEISTERT! Diese Frage 3x in Folge richtig! 🔥 Frage entfernt!`, 'success');
+            
+            // Entferne die gemeisterte Frage aus currentQuestions ZUERST
+            currentQuestions.splice(currentQuestionIndex, 1);
+            console.log(`Verbleibende Fragen: ${currentQuestions.length}`);
+            
+            // Dann aus wrongQuestions löschen und speichern
             wrongQuestions.delete(currentQ.question);
             saveWrongQuestions();
             updateBrainButton();
-            brainBossHealth--;
+            
+            // Boss Schaden und Animation
             updateBossHealth();
             animateBossHit();
-            
-            // Entferne die gemeisterte Frage aus currentQuestions
-            currentQuestions.splice(currentQuestionIndex, 1);
             
             if (currentQuestions.length === 0) {
                 victory();
@@ -1032,7 +1040,7 @@ function handleCorrectAnswer() {
             updateQuestion();
             return; // Wichtig: Beende hier, damit updateQuestion nicht doppelt aufgerufen wird
         } else {
-            showMessage(`✅ Richtig! Noch ${3 - (currentStreak + 1)}x hintereinander für diese Frage! 💪`, 'success');
+            showMessage(`✅ Richtig! Noch ${3 - newStreak}x hintereinander für diese Frage! 💪`, 'success');
             // Gehe zur nächsten Frage
             currentQuestionIndex = (currentQuestionIndex + 1) % currentQuestions.length;
         }
@@ -1358,9 +1366,9 @@ function updateQuestion() {
 // Update boss health display
 function updateBossHealth() {
     if (gameMode === 'brain') {
-        const totalHealth = brainBossHealth + currentQuestions.length;
         const currentHealth = currentQuestions.length;
-        const healthPercent = (currentHealth / totalHealth) * 100;
+        const totalHealth = brainBossTotalHealth;
+        const healthPercent = totalHealth > 0 ? (currentHealth / totalHealth) * 100 : 0;
         elements.bossHealth.style.width = healthPercent + '%';
         elements.healthText.textContent = `HP: ${currentHealth}/${totalHealth}`;
     } else {
