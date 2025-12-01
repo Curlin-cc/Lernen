@@ -1008,26 +1008,29 @@ function handleCorrectAnswer() {
         
         if (currentStreak + 1 >= 3) {
             // Frage gemeistert!
-            showMessage(`✅ Richtig! Diese Frage ${currentStreak + 1}x in Folge richtig! 🔥`, 'success');
+            showMessage(`✅ GEMEISTERT! Diese Frage ${currentStreak + 1}x in Folge richtig! 🔥 Frage entfernt!`, 'success');
             wrongQuestions.delete(currentQ.question);
             saveWrongQuestions();
+            updateBrainButton();
             brainBossHealth--;
             updateBossHealth();
             animateBossHit();
             
-            // Entferne die gemeisterte Frage
+            // Entferne die gemeisterte Frage aus currentQuestions
             currentQuestions.splice(currentQuestionIndex, 1);
-            brainQuestions = [...currentQuestions];
             
             if (currentQuestions.length === 0) {
                 victory();
                 return;
             }
             
-            // Gehe zur nächsten Frage (oder wrap around)
+            // Korrigiere den Index falls nötig
             if (currentQuestionIndex >= currentQuestions.length) {
                 currentQuestionIndex = 0;
             }
+            
+            updateQuestion();
+            return; // Wichtig: Beende hier, damit updateQuestion nicht doppelt aufgerufen wird
         } else {
             showMessage(`✅ Richtig! Noch ${3 - (currentStreak + 1)}x hintereinander für diese Frage! 💪`, 'success');
             // Gehe zur nächsten Frage
