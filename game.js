@@ -1,5 +1,284 @@
 // OSI-Quest Game Logic
 
+// Alle Fragen mit exakten Musterlösungen und Pflicht-Keywords
+const generalQuestions = [
+    // WLAN Fragen (1-8)
+    {
+        question: 'Welche Funkfrequenzen nutzen die aktuellen WLAN-Standards (IEEE 802.11n und IEEE 802.11ac)?',
+        correctAnswers: ['2 Komma 4 Gigahertz und 5 Gigahertz'],
+        requiredKeywords: [['2,4', '2.4', '2 komma 4'], ['5'], ['ghz', 'gigahertz']]
+    },
+    {
+        question: 'Welche Eigenschaften treffen auf WLAN-Funkwellen zu? a) Wände dämpfen stark b) Wände reflektieren c) Atmosphärenreflexion d) Sichtverbindung nötig',
+        correctAnswers: ['Richtig sind a und b'],
+        requiredKeywords: [['a'], ['b']]
+    },
+    {
+        question: 'Wie nennt man die Antennen, die typischerweise für WLAN verwendet werden?',
+        correctAnswers: ['Rundstrahlantennen'],
+        requiredKeywords: [['rundstrahl', 'omnidirektional']]
+    },
+    {
+        question: 'Nennen Sie zwei Merkmale, durch die WLANs nach IEEE 802.11n schneller sind als ältere Standards.',
+        correctAnswers: ['MIMO und Kanalbündelung'],
+        requiredKeywords: [['mimo'], ['kanalbündelung', 'channel bonding', 'bündelung']]
+    },
+    {
+        question: 'Nennen Sie zwei weit verbreitete WLAN-Standards. Welche Übertragungskapazitäten sind damit jeweils möglich?',
+        correctAnswers: ['IEEE 802 Punkt 11n mit bis zu etwa 300 Megabit pro Sekunde. IEEE 802 Punkt 11ac mit bis zu etwa 1 Gigabit pro Sekunde'],
+        requiredKeywords: [['802.11n', '11n'], ['300'], ['802.11ac', '11ac'], ['1 gbit', '1 gigabit', '1000']]
+    },
+    {
+        question: 'Die Übertragungskapazitäten von WLAN und Ethernet sind nicht direkt vergleichbar. Nennen Sie drei Gründe.',
+        correctAnswers: ['Gemeinsames Medium mit Kollisionen. Hoher Protokoll und Steuerungsaufwand. Stärkere Schwankungen durch Störungen und Dämpfung'],
+        requiredKeywords: [['kollision', 'gemeinsam'], ['protokoll', 'overhead', 'aufwand'], ['störung', 'schwankung', 'dämpfung']]
+    },
+    {
+        question: 'Was ist ein ISM-Band und was bedeutet es für WLAN?',
+        correctAnswers: ['Ein lizenzfreier Frequenzbereich für verschiedene Funkanwendungen. Für WLAN bedeutet das freie Nutzung bei möglicher Störung durch andere Geräte'],
+        requiredKeywords: [['lizenzfrei', 'frei'], ['störung', 'andere geräte']]
+    },
+    {
+        question: 'Welche Aussagen sind richtig? a) AP immer nötig b) MIMO braucht mehrere Antennen c) MIMO vergrößert Reichweite d) PoW versorgt Geräte e) WLAN immer verschlüsselt',
+        correctAnswers: ['Richtig sind b und c'],
+        requiredKeywords: [['b'], ['c']]
+    },
+    
+    // Übertragungstechnik Fragen
+    {
+        question: 'Erläutern Sie kurz die drei Begriffe Schrittgeschwindigkeit, Übertragungskapazität und Bandbreite und geben Sie jeweils die Maßeinheit an.',
+        correctAnswers: ['Schrittgeschwindigkeit ist die Anzahl der Signalzustandswechsel pro Sekunde mit Einheit Baud. Übertragungskapazität ist die maximale Datenrate mit Einheit bit pro Sekunde. Bandbreite ist der nutzbare Frequenzbereich mit Einheit Hertz'],
+        requiredKeywords: [['schrittgeschwindigkeit', 'signalzustand'], ['baud'], ['übertragungskapazität', 'datenrate'], ['bit'], ['bandbreite', 'frequenz'], ['hertz', 'hz']]
+    },
+    {
+        question: 'Definieren Sie kurz die Begriffe Basisband, Schmalband und Breitband.',
+        correctAnswers: ['Basisband nutzt das gesamte Medium ohne Frequenzmultiplex. Schmalband nutzt einen kleinen begrenzten Frequenzbereich. Breitband nutzt einen großen Frequenzbereich für hohe Datenraten'],
+        requiredKeywords: [['basisband', 'gesamt'], ['schmalband', 'klein', 'begrenzt'], ['breitband', 'groß', 'hoch']]
+    },
+    {
+        question: 'Welche grundlegenden Medienzugriffsverfahren gibt es? Nennen Sie jeweils ein Beispiel.',
+        correctAnswers: ['Deterministisch zum Beispiel Token Ring. Wettbewerbsbasiert zum Beispiel CSMA CD. Reservierungsbasiert zum Beispiel Polling'],
+        requiredKeywords: [['deterministisch', 'token'], ['wettbewerb', 'csma'], ['reservierung', 'polling']]
+    },
+    {
+        question: 'Wie heißt das Verkabelungskonzept bei der Kommunikationsinfrastruktur in Bürogebäuden? Welche Topologie entsteht?',
+        correctAnswers: ['Strukturierte Verkabelung mit Primär Sekundär und Tertiärverkabelung und zentralen Verteilerpunkten. Daraus entsteht eine Stern Topologie'],
+        requiredKeywords: [['strukturiert'], ['primär', 'sekundär', 'tertiär'], ['stern']]
+    },
+    {
+        question: 'Wie viele Wanddosen sehen Sie in einem Büroraum mit drei Arbeitsplätzen vor? Warum?',
+        correctAnswers: ['Zwei Dosen pro Arbeitsplatz also sechs insgesamt. Grund ist Redundanz und gleichzeitige Nutzung unterschiedlicher Dienste'],
+        requiredKeywords: [['sechs', '6', 'zwei pro'], ['redundanz', 'dienste', 'gleichzeitig']]
+    },
+    {
+        question: 'Nennen Sie für UTP, FTP, S/FTP und Glasfasern jeweils geeignete Anwendungsbereiche.',
+        correctAnswers: ['UTP für einfache Büroverkabelung. FTP bei stärkerer Störeinstrahlung. S FTP für hohe Störsicherheit in Technikräumen. Glasfaser für große Entfernungen und hohe Datenraten'],
+        requiredKeywords: [['utp', 'büro'], ['ftp', 'störung'], ['glasfaser', 'entfernung', 'datenrate']]
+    },
+    {
+        question: 'Welche physikalische Eigenschaft geben die Kategorien von Twisted-Pair-Kabeln (Cat.5, Cat.6) an?',
+        correctAnswers: ['Sie geben die maximal unterstützte Frequenz und damit die erreichbare Datenrate an'],
+        requiredKeywords: [['frequenz'], ['datenrate', 'übertragung']]
+    },
+    {
+        question: 'Was bedeutet Cat.7? Worin unterscheidet es sich von Cat.5?',
+        correctAnswers: ['Cat sieben unterstützt höhere Frequenzen und bessere Schirmung als Cat fünf und ermöglicht deutlich höhere Datenraten'],
+        requiredKeywords: [['cat 7', 'cat7', 'cat.7', 'sieben'], ['höher', 'besser'], ['cat 5', 'cat5', 'cat.5', 'fünf']]
+    },
+    {
+        question: 'Welche Ethernet-Varianten sind in Primär-, Sekundär- und Tertiärbereich gebräuchlich?',
+        correctAnswers: ['Primärbereich Glasfaser Ethernet. Sekundärbereich meist Glasfaser oder Kupfer Gigabit Ethernet. Tertiärbereich Kupfer Gigabit oder Fast Ethernet'],
+        requiredKeywords: [['primär', 'glasfaser'], ['sekundär'], ['tertiär', 'kupfer']]
+    },
+    {
+        question: 'Welche Ethernet-Varianten sind im WAN gebräuchlich?',
+        correctAnswers: ['Typisch Metro Ethernet und Carrier Ethernet'],
+        requiredKeywords: [['metro', 'carrier']]
+    },
+    {
+        question: 'In welchen Bereichen sind Glasfasern und in welchen sind Kupferkabel vorzuziehen?',
+        correctAnswers: ['Glasfaser für große Entfernungen hohe Datenraten und elektromagnetische Unempfindlichkeit. Kupfer für kurze Strecken niedrige Kosten und PoE Versorgung'],
+        requiredKeywords: [['glasfaser', 'entfernung', 'datenrate'], ['kupfer', 'kosten', 'poe', 'kurz']]
+    },
+    {
+        question: 'Was ist PoE? Nennen Sie zwei Anwendungsgebiete dafür.',
+        correctAnswers: ['Power over Ethernet überträgt Strom über das Netzwerkkabel. Beispiele IP Kameras und Access Points'],
+        requiredKeywords: [['power over ethernet', 'poe', 'strom'], ['kamera', 'access point', 'ap', 'telefon']]
+    },
+    {
+        question: 'Wie ist eine Ethernet-Adresse (MAC-Adresse) aufgebaut? Wie wird Eindeutigkeit gewährleistet?',
+        correctAnswers: ['MAC Adressen bestehen aus sechsmal zwei hexadezimalen Oktetten. Die ersten drei Oktette stammen vom Hersteller und sichern die globale Eindeutigkeit. Kommunikation erfolgt im lokalen Netzwerk'],
+        requiredKeywords: [['6', 'sechs', 'oktett'], ['hersteller'], ['eindeutig', 'lokal']]
+    },
+    {
+        question: 'Beschreiben Sie den Aufbau und die Funktionsweise eines Ethernet-Switch.',
+        correctAnswers: ['Ein Switch besteht aus mehreren Ports und einer internen Weiterleitungstabelle. Er lernt MAC Adressen pro Port und leitet Frames gezielt zum Zielport weiter was Kollisionen verhindert und den Verkehr segmentiert'],
+        requiredKeywords: [['port'], ['weiterleitungstabelle', 'mac', 'lernt'], ['kollision', 'segmentier']]
+    },
+    
+    // Allgemeine Fragen
+    {
+        question: 'Was versteht man unter der zunehmenden Konvergenz der Medien? Nennen Sie zwei Beispiele.',
+        correctAnswers: ['Medienkonvergenz bedeutet das Zusammenwachsen verschiedener Medientypen zu gemeinsamen Plattformen und Geräten. Beispiele: Fernsehen über das Internet sowie Smartphones die Kamera Rechner und Unterhaltung vereinen'],
+        requiredKeywords: [['zusammenwachsen', 'konvergenz', 'vereinen'], ['smartphone', 'fernsehen', 'internet', 'iptv']]
+    },
+    {
+        question: 'Worin unterscheiden sich in der Nachrichtentechnik Information und Nachricht?',
+        correctAnswers: ['Information ist der abstrakte Bedeutungsgehalt. Nachricht ist das technisch übertragene Signal das diese Bedeutung transportiert'],
+        requiredKeywords: [['information', 'bedeutung'], ['nachricht', 'signal', 'technisch']]
+    },
+    {
+        question: 'Erläutern Sie die Funktion einer Schicht im OSI-Referenzmodell. Mit welchen anderen Schichten wird kommuniziert?',
+        correctAnswers: ['Eine Schicht im OSI Referenzmodell übernimmt klar abgegrenzte Aufgaben und bietet Dienste für die Schicht darüber an. Sie kommuniziert direkt nur mit der nächsthöheren und der nächstniedrigeren Schicht. Der Vorteil besteht in klarer Struktur besserer Austauschbarkeit einzelner Schichten und vereinfachter Fehlersuche'],
+        requiredKeywords: [['schicht', 'layer'], ['aufgabe', 'dienst'], ['nächst', 'darüber', 'darunter', 'ober', 'unter']]
+    },
+    
+    // DSL Fragen
+    {
+        question: 'Welche Aufgaben haben bei DSL die Komponenten DSL-Modem, Splitter und DSLAM? Welche Komponente kann bei VoIP entfallen?',
+        correctAnswers: ['Das DSL Modem wandelt die Signale und steht beim Kunden. Der Splitter trennt Telefon und Datensignal und steht ebenfalls beim Kunden. Der DSLAM bündelt alle Kundenanschlüsse im Netz des Providers und steht in der Vermittlungsstelle. Bei VoIP kann der Splitter entfallen'],
+        requiredKeywords: [['modem', 'signal', 'wandel'], ['splitter', 'trenn', 'telefon'], ['dslam', 'bündel', 'vermittlung'], ['voip', 'splitter', 'entfall']]
+    },
+    {
+        question: 'Was muss ein Netzbetreiber tun, um seinen Standard-DSL-Kunden VDSL anbieten zu können?',
+        correctAnswers: ['Er muss die Kupferleitungen durch Glasfaser bis zu Straßenverteilern verlängern und dort neue Outdoor DSLAMs installieren'],
+        requiredKeywords: [['glasfaser'], ['outdoor', 'straßenverteiler', 'verteiler'], ['dslam']]
+    },
+    {
+        question: 'Nennen Sie vier Funktionen eines DSL/Kabel-Routers, die man auch als separate Geräte kaufen könnte.',
+        correctAnswers: ['Router Funktionen sind zum Beispiel Modem Firewall Switch WLAN Access Point'],
+        requiredKeywords: [['modem'], ['firewall'], ['switch'], ['wlan', 'access point']]
+    },
+    
+    // IP-Netzwerk Fragen
+    {
+        question: 'Wie ist ein IP-Netzwerk aufgebaut?',
+        correctAnswers: ['Ein IP Netzwerk besteht aus Hosts Routern und Subnetzen die über Adressen und Masken logisch gegliedert sind'],
+        requiredKeywords: [['host'], ['router'], ['subnetz'], ['adresse', 'maske']]
+    },
+    {
+        question: 'Was versteht man unter Routing und wie funktioniert es?',
+        correctAnswers: ['Routing ist das Weiterleiten von Paketen zwischen Subnetzen. Ein Router prüft die Zieladresse und wählt anhand seiner Tabelle den nächsten Weg'],
+        requiredKeywords: [['weiterleiten', 'routing'], ['zieladresse', 'ziel'], ['tabelle', 'routingtabelle']]
+    },
+    {
+        question: 'Welche Informationen sind in einem IP-Header enthalten (vier genügen)?',
+        correctAnswers: ['Beispiele sind Quelladresse Zieladresse TTL Protokoll und Prüfsumme'],
+        requiredKeywords: [['quelladresse', 'source'], ['zieladresse', 'destination'], ['ttl', 'protokoll', 'prüfsumme', 'checksum']]
+    },
+    {
+        question: 'Welche Komponenten können zur Kopplung von Subnetzen verwendet werden - Switches, Router, Patchkabel, Firewalls?',
+        correctAnswers: ['Zur Kopplung von Subnetzen werden Router oder Firewalls genutzt'],
+        requiredKeywords: [['router'], ['firewall']]
+    },
+    {
+        question: 'Welche Informationen nutzt ein Router für die Entscheidung, wohin er ein Datenpaket weiterleitet?',
+        correctAnswers: ['Er nutzt die Zieladresse und seine Routingtabelle'],
+        requiredKeywords: [['zieladresse', 'ziel-ip', 'destination'], ['routingtabelle', 'tabelle']]
+    },
+    {
+        question: 'Wozu dienen die Netz- und die Broadcastadresse in einem Subnetz?',
+        correctAnswers: ['Die Netzadresse kennzeichnet das Subnetz. Die Broadcastadresse erreicht alle Geräte im Subnetz gleichzeitig'],
+        requiredKeywords: [['netzadresse', 'subnetz', 'kennzeichn'], ['broadcast', 'alle geräte', 'gleichzeitig']]
+    },
+    {
+        question: 'Wie bekommt ein Host heraus, welche MAC-Adresse zu einer IP-Adresse gehört? Wie heißt das Protokoll? Beschreiben Sie den Ablauf.',
+        correctAnswers: ['Über ARP. Der Host sendet eine Anfrage an alle im Subnetz. Der Besitzer der gesuchten Adresse antwortet mit seiner MAC Adresse'],
+        requiredKeywords: [['arp'], ['anfrage', 'broadcast', 'alle'], ['mac', 'antwortet']]
+    },
+    
+    // E-Mail Fragen
+    {
+        question: 'Wie ist eine E-Mail-Adresse aufgebaut? Welcher Teil der Adresse hat welche Aufgabe?',
+        correctAnswers: ['Sie besteht aus Benutzername gefolgt von einem At Zeichen und der Domain. Der Benutzername identifiziert das Postfach der Domainname führt zum Mailserver des Anbieters'],
+        requiredKeywords: [['benutzername', 'user'], ['@', 'at'], ['domain'], ['postfach', 'mailserver']]
+    },
+    {
+        question: 'Wie wird ermittelt, welcher Mailserver für eine bestimmte Mailadresse zuständig ist?',
+        correctAnswers: ['Über einen MX Eintrag im DNS'],
+        requiredKeywords: [['mx'], ['dns']]
+    },
+    {
+        question: 'Welche beiden Protokolle sind für die Abholung von E-Mails gebräuchlich? Worin unterscheiden sie sich?',
+        correctAnswers: ['POP3 und IMAP. POP3 holt Mails meist lokal ab und löscht sie oft am Server. IMAP lässt die Mails auf dem Server und synchronisiert mehrere Geräte'],
+        requiredKeywords: [['pop3'], ['imap'], ['lokal', 'löscht', 'server', 'synchron']]
+    },
+    
+    // Firewall Fragen
+    {
+        question: 'Erklären Sie kurz, was eine monolithische Firewall ist und was man unter einer Zone versteht.',
+        correctAnswers: ['Eine monolithische Firewall ist ein zentrales Gerät das den gesamten Datenverkehr zwischen mehreren Netzbereichen kontrolliert. Eine Zone ist ein logisch abgegrenzter Sicherheitsbereich wie internes Netz oder Internet'],
+        requiredKeywords: [['monolithisch', 'zentral'], ['datenverkehr', 'kontroll'], ['zone', 'sicherheitsbereich', 'abgegrenzt']]
+    },
+    {
+        question: 'Beschreiben Sie anhand eines Beispiels, wie Paketfilterregeln funktionieren.',
+        correctAnswers: ['Ein Paketfilter prüft Felder wie Quelladresse Zieladresse Port und Richtung. Beispiel Regel erlaubt aus dem internen Netz Port 80 nach außen und blockiert eingehende Verbindungen von außen'],
+        requiredKeywords: [['paketfilter', 'prüft'], ['quelladresse', 'zieladresse', 'port'], ['erlaubt', 'blockiert', 'regel']]
+    },
+    {
+        question: 'Beschreiben Sie die Funktionsweise einer NAT-Firewall.',
+        correctAnswers: ['Eine NAT Firewall ersetzt interne private Adressen durch eine öffentliche Adresse und führt eine Zuordnungstabelle. Antworten werden anhand dieser Tabelle an den richtigen internen Host zurückgegeben'],
+        requiredKeywords: [['nat'], ['privat', 'intern'], ['öffentlich'], ['tabelle', 'zuordnung']]
+    },
+    
+    // Übergreifende Fragen
+    {
+        question: 'Ordnen Sie zu TCP/IP-Schichten zu: Ethernet-Switch, TCP, ARP, UTP-Kabel, DNS, http, RJ-45, POP3, UDP',
+        correctAnswers: ['Physikalisch UTP Kabel RJ 45. Netzzugang Ethernet Switch ARP. Vermittlung Virtuelle Verbindung UDP. Anwendung DNS http POP3 TCP'],
+        requiredKeywords: [['physikalisch', 'utp', 'rj'], ['netzzugang', 'ethernet', 'arp'], ['vermittlung', 'udp'], ['anwendung', 'dns', 'http', 'tcp']]
+    },
+    {
+        question: 'Erklären Sie den Begriff Basisband.',
+        correctAnswers: ['Übertragung ohne Frequenzmultiplex'],
+        requiredKeywords: [['ohne'], ['frequenzmultiplex', 'multiplex', 'modulation']]
+    },
+    {
+        question: 'Was bedeutet WAN?',
+        correctAnswers: ['Weitverkehrsnetz'],
+        requiredKeywords: [['weitverkehr', 'wide area', 'wan']]
+    },
+    {
+        question: 'Was ist IEEE 802.11n/ac?',
+        correctAnswers: ['WLAN Standard mit höherer Datenrate durch MIMO'],
+        requiredKeywords: [['wlan'], ['mimo', 'datenrate', 'schnell']]
+    },
+    {
+        question: 'Was ist ein Funktionsverbund/Dienst?',
+        correctAnswers: ['Zusammenspiel mehrerer Systeme zu einem Dienst'],
+        requiredKeywords: [['zusammenspiel', 'mehrere'], ['system', 'dienst']]
+    },
+    {
+        question: 'Was ist das OSI-Referenzmodell?',
+        correctAnswers: ['Sieben Schichten zur Strukturierung der Kommunikation'],
+        requiredKeywords: [['sieben', '7'], ['schicht'], ['kommunikation', 'struktur']]
+    },
+    {
+        question: 'Was ist eine Firewall?',
+        correctAnswers: ['Gerät zur Filterung und Kontrolle von Datenverkehr'],
+        requiredKeywords: [['filter', 'kontroll'], ['datenverkehr', 'traffic', 'verkehr']]
+    },
+    {
+        question: 'Was ist LTE?',
+        correctAnswers: ['Mobilfunkstandard der vierten Generation'],
+        requiredKeywords: [['mobilfunk', '4g', 'viert']]
+    },
+    {
+        question: 'Was ist ein Splitter?',
+        correctAnswers: ['Trennt Telefon und DSL Signal'],
+        requiredKeywords: [['trenn'], ['telefon', 'dsl', 'signal']]
+    },
+    {
+        question: 'Was ist die Digitale Dividende?',
+        correctAnswers: ['Freigewordene Funkfrequenzen nach Abschaltung alter Rundfunktechnik'],
+        requiredKeywords: [['frequenz', 'funk'], ['abschalt', 'rundfunk', 'frei']]
+    },
+    {
+        question: 'Was ist ARP?',
+        correctAnswers: ['Protokoll zum Ermitteln der MAC Adresse zu einer IP Adresse'],
+        requiredKeywords: [['mac'], ['ip'], ['ermitteln', 'auflösen', 'protokoll']]
+    }
+];
+
 // Das OSI-Modell von unten nach oben
 const osiLayers = [
     { 
@@ -39,913 +318,15 @@ const osiLayers = [
     }
 ];
 
-// Allgemeine Fragen
-const generalQuestions = [
-    {
-        question: 'Was versteht man unter der zunehmenden Konvergenz der Medien? Nennen Sie zwei Beispiele.',
-        correctAnswers: [
-            'Zusammenwachsen verschiedener Medientypen zu gemeinsamen Plattformen',
-            'Fernsehen über Internet, Smartphones vereinen Kamera Rechner Unterhaltung'
-        ],
-        alternatives: [
-            'konvergenz',
-            'zusammenwachsen',
-            'medientypen',
-            'plattformen',
-            'smartphone',
-            'fernsehen',
-            'internet',
-            'iptv',
-            'streaming',
-            'kamera',
-            'rechner',
-            'unterhaltung',
-            'vereinen'
-        ]
-    },
-    {
-        question: 'Worin unterscheiden sich in der Nachrichtentechnik Information und Nachricht?',
-        correctAnswers: [
-            'Information ist der abstrakte Bedeutungsgehalt, Nachricht ist das technisch übertragene Signal'
-        ],
-        alternatives: [
-            'information',
-            'nachricht',
-            'abstrakt',
-            'bedeutungsgehalt',
-            'bedeutung',
-            'signal',
-            'technisch',
-            'übertragen',
-            'transportiert',
-            'inhalt',
-            'träger'
-        ]
-    },
-    {
-        question: 'Erläutern Sie die Funktion einer Schicht im OSI-Referenzmodell. Mit welchen anderen Schichten wird kommuniziert?',
-        correctAnswers: [
-            'Schicht übernimmt klar abgegrenzte Aufgaben, bietet Dienste für darüber liegende Schicht',
-            'Kommuniziert nur mit nächsthöherer und nächstniedrigerer Schicht'
-        ],
-        alternatives: [
-            'schicht',
-            'layer',
-            'aufgaben',
-            'abgegrenzt',
-            'dienste',
-            'darüber',
-            'darunter',
-            'nächsthöher',
-            'nächstniedriger',
-            'kommuniziert',
-            'struktur',
-            'austauschbar',
-            'fehlersuche',
-            'vorteil'
-        ]
-    },
-    {
-        question: 'Erläutern Sie kurz die drei Begriffe Schrittgeschwindigkeit, Übertragungskapazität und Bandbreite und geben Sie jeweils die Maßeinheit an.',
-        correctAnswers: [
-            'Schrittgeschwindigkeit: Signalzustandswechsel pro Sekunde in Baud',
-            'Übertragungskapazität: maximale Datenrate in bit/s',
-            'Bandbreite: nutzbarer Frequenzbereich in Hertz'
-        ],
-        alternatives: [
-            'schrittgeschwindigkeit',
-            'signalzustandswechsel',
-            'baud',
-            'übertragungskapazität',
-            'datenrate',
-            'bit/s',
-            'bps',
-            'bandbreite',
-            'frequenzbereich',
-            'hertz',
-            'hz'
-        ]
-    },
-    {
-        question: 'Definieren Sie kurz die Begriffe Basisband, Schmalband und Breitband.',
-        correctAnswers: [
-            'Basisband nutzt gesamtes Medium ohne Frequenzmultiplex',
-            'Schmalband nutzt kleinen begrenzten Frequenzbereich',
-            'Breitband nutzt großen Frequenzbereich für hohe Datenraten'
-        ],
-        alternatives: [
-            'basisband',
-            'gesamtes medium',
-            'frequenzmultiplex',
-            'schmalband',
-            'begrenzt',
-            'breitband',
-            'großer frequenzbereich',
-            'hohe datenraten',
-            'frequenzbereich'
-        ]
-    },
-    {
-        question: 'Welche grundlegenden Medienzugriffsverfahren gibt es? Nennen Sie jeweils ein Beispiel.',
-        correctAnswers: [
-            'Deterministisch (Token Ring), Wettbewerbsbasiert (CSMA/CD), Reservierungsbasiert (Polling)'
-        ],
-        alternatives: [
-            'deterministisch',
-            'token ring',
-            'token',
-            'wettbewerb',
-            'csma',
-            'csma/cd',
-            'reservierung',
-            'polling',
-            'kollision'
-        ]
-    },
-    {
-        question: 'Wie heißt das Verkabelungskonzept bei der Kommunikationsinfrastruktur in Bürogebäuden? Welche Topologie entsteht?',
-        correctAnswers: [
-            'Strukturierte Verkabelung mit Primär-, Sekundär- und Tertiärverkabelung',
-            'Zentrale Verteilerpunkte, Stern-Topologie'
-        ],
-        alternatives: [
-            'strukturierte verkabelung',
-            'structured cabling',
-            'primär',
-            'sekundär',
-            'tertiär',
-            'verteiler',
-            'stern',
-            'star',
-            'topologie'
-        ]
-    },
-    {
-        question: 'Wie viele Wanddosen sehen Sie in einem Büroraum mit drei Arbeitsplätzen vor? Warum?',
-        correctAnswers: [
-            'Zwei Dosen pro Arbeitsplatz, also sechs insgesamt',
-            'Grund: Redundanz und gleichzeitige Nutzung unterschiedlicher Dienste'
-        ],
-        alternatives: [
-            '6',
-            'sechs',
-            'zwei pro arbeitsplatz',
-            '2 pro',
-            'redundanz',
-            'dienste',
-            'gleichzeitig',
-            'reserve'
-        ]
-    },
-    {
-        question: 'Nennen Sie für UTP, FTP, S/FTP und Glasfasern jeweils geeignete Anwendungsbereiche.',
-        correctAnswers: [
-            'UTP: einfache Büroverkabelung',
-            'FTP: stärkere Störeinstrahlung',
-            'S/FTP: hohe Störsicherheit in Technikräumen',
-            'Glasfaser: große Entfernungen und hohe Datenraten'
-        ],
-        alternatives: [
-            'utp',
-            'büro',
-            'einfach',
-            'ftp',
-            'störung',
-            'störeinstrahlung',
-            's/ftp',
-            'sftp',
-            'störsicherheit',
-            'technikraum',
-            'glasfaser',
-            'entfernung',
-            'datenrate'
-        ]
-    },
-    {
-        question: 'Welche physikalische Eigenschaft geben die Kategorien von Twisted-Pair-Kabeln (Cat.5, Cat.6) an?',
-        correctAnswers: [
-            'Maximal unterstützte Frequenz und damit erreichbare Datenrate'
-        ],
-        alternatives: [
-            'frequenz',
-            'datenrate',
-            'bandbreite',
-            'übertragungsrate',
-            'mhz',
-            'kategorie',
-            'cat'
-        ]
-    },
-    {
-        question: 'Was bedeutet Cat.7? Worin unterscheidet es sich von Cat.5?',
-        correctAnswers: [
-            'Cat.7 unterstützt höhere Frequenzen und bessere Schirmung als Cat.5',
-            'Ermöglicht deutlich höhere Datenraten'
-        ],
-        alternatives: [
-            'cat.7',
-            'cat7',
-            'cat.5',
-            'cat5',
-            'höhere frequenz',
-            'bessere schirmung',
-            'höhere datenrate',
-            'mhz',
-            'bandbreite'
-        ]
-    },
-    {
-        question: 'Welche Ethernet-Varianten sind in Primär-, Sekundär- und Tertiärbereich gebräuchlich?',
-        correctAnswers: [
-            'Primärbereich: Glasfaser-Ethernet',
-            'Sekundärbereich: Glasfaser oder Kupfer Gigabit-Ethernet',
-            'Tertiärbereich: Kupfer Gigabit oder Fast-Ethernet'
-        ],
-        alternatives: [
-            'primär',
-            'sekundär',
-            'tertiär',
-            'glasfaser',
-            'kupfer',
-            'gigabit',
-            'fast ethernet',
-            '10gbase',
-            '1000base',
-            '100base'
-        ]
-    },
-    {
-        question: 'Welche Ethernet-Varianten sind im WAN gebräuchlich?',
-        correctAnswers: [
-            'Metro Ethernet und Carrier Ethernet'
-        ],
-        alternatives: [
-            'wan',
-            'metro ethernet',
-            'carrier ethernet',
-            '10gbase',
-            '100gbase',
-            'glasfaser',
-            'weitverkehr'
-        ]
-    },
-    {
-        question: 'In welchen Bereichen sind Glasfasern und in welchen sind Kupferkabel vorzuziehen?',
-        correctAnswers: [
-            'Glasfaser: große Entfernungen, hohe Datenraten, elektromagnetische Unempfindlichkeit',
-            'Kupfer: kurze Strecken, niedrige Kosten, PoE-Versorgung'
-        ],
-        alternatives: [
-            'glasfaser',
-            'große entfernung',
-            'hohe datenrate',
-            'elektromagnetisch',
-            'unempfindlich',
-            'kupfer',
-            'kurze strecke',
-            'kosten',
-            'poe',
-            'günstig'
-        ]
-    },
-    {
-        question: 'Was ist PoE? Nennen Sie zwei Anwendungsgebiete dafür.',
-        correctAnswers: [
-            'Power over Ethernet überträgt Strom über Netzwerkkabel',
-            'Beispiele: IP-Kameras und Access Points'
-        ],
-        alternatives: [
-            'poe',
-            'power over ethernet',
-            'strom',
-            'netzwerkkabel',
-            'ip-kamera',
-            'kamera',
-            'access point',
-            'wlan',
-            'ap',
-            'voip'
-        ]
-    },
-    {
-        question: 'Wie ist eine Ethernet-Adresse (MAC-Adresse) aufgebaut? Wie wird Eindeutigkeit gewährleistet?',
-        correctAnswers: [
-            'MAC-Adressen bestehen aus 6×2 hexadezimalen Oktetten',
-            'Erste drei Oktette vom Hersteller sichern globale Eindeutigkeit',
-            'Kommunikation im lokalen Netzwerk'
-        ],
-        alternatives: [
-            'mac',
-            'mac-adresse',
-            '6',
-            'sechs',
-            'oktett',
-            'hexadezimal',
-            'hersteller',
-            'eindeutigkeit',
-            'lokal',
-            'netzwerk'
-        ]
-    },
-    {
-        question: 'Beschreiben Sie den Aufbau und die Funktionsweise eines Ethernet-Switch.',
-        correctAnswers: [
-            'Switch besteht aus mehreren Ports und interner Weiterleitungstabelle',
-            'Lernt MAC-Adressen pro Port und leitet Frames gezielt zum Zielport',
-            'Verhindert Kollisionen und segmentiert Verkehr'
-        ],
-        alternatives: [
-            'switch',
-            'port',
-            'ports',
-            'weiterleitungstabelle',
-            'mac-adresse',
-            'lernt',
-            'frame',
-            'zielport',
-            'kollision',
-            'segmentiert',
-            'verkehr'
-        ]
-    },
-    {
-        question: 'Welche Aufgaben haben bei DSL die Komponenten DSL-Modem, Splitter und DSLAM? Welche Komponente kann bei VoIP entfallen?',
-        correctAnswers: [
-            'DSL-Modem: Modulation, Splitter: Frequenztrennung, DSLAM: Bündelung. Splitter entfällt bei VoIP'
-        ],
-        alternatives: [
-            'dsl-modem',
-            'modem',
-            'splitter',
-            'dslam',
-            'modulation',
-            'frequenztrennung',
-            'bündelung',
-            'voip',
-            'entfällt',
-            'telefon',
-            'vermittlungsstelle'
-        ]
-    },
-    {
-        question: 'Was muss ein Netzbetreiber tun, um seinen Standard-DSL-Kunden VDSL anbieten zu können?',
-        correctAnswers: [
-            'Kupferleitungen durch Glasfaser bis zu Straßenverteilern verlängern',
-            'Neue Outdoor-DSLAMs installieren'
-        ],
-        alternatives: [
-            'vdsl',
-            'glasfaser',
-            'kupferleitung',
-            'straßenverteiler',
-            'verteiler',
-            'outdoor',
-            'dslam',
-            'installieren',
-            'fttc'
-        ]
-    },
-    {
-        question: 'Nennen Sie vier Funktionen eines DSL/Kabel-Routers, die man auch als separate Geräte kaufen könnte.',
-        correctAnswers: [
-            'Modem, Firewall, Switch, WLAN Access Point'
-        ],
-        alternatives: [
-            'modem',
-            'firewall',
-            'switch',
-            'wlan',
-            'access point',
-            'router',
-            'dhcp',
-            'nat'
-        ]
-    },
-    {
-        question: 'Welche Funkfrequenzen nutzen die aktuellen WLAN-Standards (IEEE 802.11n und IEEE 802.11ac)?',
-        correctAnswers: [
-            '2,4 Gigahertz und 5 Gigahertz'
-        ],
-        alternatives: [
-            '2,4 ghz',
-            '2.4 ghz',
-            '5 ghz',
-            'gigahertz',
-            '802.11n',
-            '802.11ac',
-            'dual band'
-        ]
-    },
-    {
-        question: 'Welche Eigenschaften treffen auf WLAN-Funkwellen zu? a) Wände dämpfen stark b) Wände reflektieren c) Atmosphärenreflexion d) Sichtverbindung nötig',
-        correctAnswers: [
-            'Richtig sind a und b'
-        ],
-        alternatives: [
-            'a',
-            'b',
-            'dämpfen',
-            'dämpfung',
-            'reflektieren',
-            'reflexion',
-            'wand',
-            'wände'
-        ]
-    },
-    {
-        question: 'Wie nennt man die Antennen, die typischerweise für WLAN verwendet werden?',
-        correctAnswers: [
-            'Rundstrahlantennen'
-        ],
-        alternatives: [
-            'rundstrahlantenne',
-            'rundstrahlantennen',
-            'rundstrahler',
-            'omnidirektional',
-            'omni'
-        ]
-    },
-    {
-        question: 'Nennen Sie zwei Merkmale, durch die WLANs nach IEEE 802.11n schneller sind als ältere Standards.',
-        correctAnswers: [
-            'MIMO und Kanalbündelung'
-        ],
-        alternatives: [
-            'mimo',
-            'kanalbündelung',
-            'kanal',
-            'bündelung',
-            'multiple',
-            'antennen'
-        ]
-    },
-    {
-        question: 'Nennen Sie zwei weit verbreitete WLAN-Standards. Welche Übertragungskapazitäten sind damit jeweils möglich?',
-        correctAnswers: [
-            'IEEE 802.11n mit bis zu etwa 300 Megabit pro Sekunde',
-            'IEEE 802.11ac mit bis zu etwa 1 Gigabit pro Sekunde'
-        ],
-        alternatives: [
-            '802.11n',
-            '802.11ac',
-            '300',
-            'megabit',
-            'mbit',
-            '1 gigabit',
-            'gbit',
-            'wifi 4',
-            'wifi 5'
-        ]
-    },
-    {
-        question: 'Die Übertragungskapazitäten von WLAN und Ethernet sind nicht direkt vergleichbar. Nennen Sie drei Gründe.',
-        correctAnswers: [
-            'Gemeinsames Medium mit Kollisionen',
-            'Hoher Protokoll- und Steuerungsaufwand',
-            'Stärkere Schwankungen durch Störungen und Dämpfung'
-        ],
-        alternatives: [
-            'gemeinsam',
-            'medium',
-            'kollision',
-            'protokoll',
-            'steuerung',
-            'aufwand',
-            'schwankung',
-            'störung',
-            'dämpfung',
-            'overhead'
-        ]
-    },
-    {
-        question: 'Was ist ein ISM-Band und was bedeutet es für WLAN?',
-        correctAnswers: [
-            'Ein lizenzfreier Frequenzbereich für verschiedene Funkanwendungen',
-            'Für WLAN bedeutet freie Nutzung bei möglicher Störung durch andere Geräte'
-        ],
-        alternatives: [
-            'ism',
-            'lizenzfrei',
-            'frequenzbereich',
-            'funkanwendung',
-            'freie nutzung',
-            'störung',
-            'geräte',
-            'industrial',
-            'scientific',
-            'medical'
-        ]
-    },
-    {
-        question: 'Welche Aussagen sind richtig? a) AP immer nötig b) MIMO braucht mehrere Antennen c) MIMO vergrößert Reichweite d) PoW versorgt Geräte e) WLAN immer verschlüsselt',
-        correctAnswers: [
-            'Richtig sind b und c'
-        ],
-        alternatives: [
-            'b',
-            'c',
-            'mimo',
-            'antennen',
-            'reichweite',
-            'mehrere'
-        ]
-    },
-    {
-        question: 'Wie ist ein IP-Netzwerk aufgebaut?',
-        correctAnswers: [
-            'IP-Netzwerk besteht aus Hosts, Routern und Subnetzen',
-            'Logisch gegliedert über Adressen und Masken'
-        ],
-        alternatives: [
-            'hosts',
-            'router',
-            'subnetz',
-            'subnetze',
-            'adressen',
-            'masken',
-            'logisch',
-            'gegliedert'
-        ]
-    },
-    {
-        question: 'Was versteht man unter Routing und wie funktioniert es?',
-        correctAnswers: [
-            'Routing ist das Weiterleiten von Paketen zwischen Subnetzen',
-            'Router prüft Zieladresse und wählt anhand Tabelle den nächsten Weg'
-        ],
-        alternatives: [
-            'routing',
-            'weiterleiten',
-            'pakete',
-            'subnetze',
-            'router',
-            'zieladresse',
-            'prüft',
-            'tabelle',
-            'weg',
-            'next hop'
-        ]
-    },
-    {
-        question: 'Welche Informationen sind in einem IP-Header enthalten (vier genügen)?',
-        correctAnswers: [
-            'Beispiele sind Quelladresse, Zieladresse, TTL, Protokoll und Prüfsumme'
-        ],
-        alternatives: [
-            'quelladresse',
-            'quell-ip',
-            'source',
-            'zieladresse',
-            'ziel-ip',
-            'destination',
-            'ttl',
-            'time to live',
-            'protokoll',
-            'prüfsumme',
-            'checksum'
-        ]
-    },
-    {
-        question: 'Welche Komponenten können zur Kopplung von Subnetzen verwendet werden - Switches, Router, Patchkabel, Firewalls?',
-        correctAnswers: [
-            'Zur Kopplung von Subnetzen werden Router oder Firewalls genutzt'
-        ],
-        alternatives: [
-            'router',
-            'firewall',
-            'firewalls',
-            'layer 3',
-            'nicht switch',
-            'nicht patchkabel'
-        ]
-    },
-    {
-        question: 'Welche Informationen nutzt ein Router für die Entscheidung, wohin er ein Datenpaket weiterleitet?',
-        correctAnswers: [
-            'Er nutzt die Zieladresse und seine Routingtabelle'
-        ],
-        alternatives: [
-            'zieladresse',
-            'ziel-ip',
-            'destination',
-            'routingtabelle',
-            'routing-tabelle',
-            'tabelle',
-            'next hop'
-        ]
-    },
-    {
-        question: 'Wozu dienen die Netz- und die Broadcastadresse in einem Subnetz?',
-        correctAnswers: [
-            'Netzadresse kennzeichnet das Subnetz',
-            'Broadcastadresse erreicht alle Geräte im Subnetz gleichzeitig'
-        ],
-        alternatives: [
-            'netzadresse',
-            'kennzeichnet',
-            'subnetz',
-            'broadcast',
-            'broadcastadresse',
-            'alle geräte',
-            'gleichzeitig',
-            'erreicht'
-        ]
-    },
-    {
-        question: 'Wie bekommt ein Host heraus, welche MAC-Adresse zu einer IP-Adresse gehört? Wie heißt das Protokoll? Beschreiben Sie den Ablauf.',
-        correctAnswers: [
-            'Über ARP',
-            'Host sendet Anfrage an alle im Subnetz',
-            'Besitzer der gesuchten Adresse antwortet mit seiner MAC-Adresse'
-        ],
-        alternatives: [
-            'arp',
-            'address resolution protocol',
-            'anfrage',
-            'alle',
-            'subnetz',
-            'besitzer',
-            'antwortet',
-            'mac-adresse',
-            'broadcast'
-        ]
-    },
-    {
-        question: 'Wie ist eine E-Mail-Adresse aufgebaut? Welcher Teil der Adresse hat welche Aufgabe?',
-        correctAnswers: [
-            'Benutzername gefolgt von At-Zeichen und Domain',
-            'Benutzername identifiziert Postfach, Domainname führt zum Mailserver des Anbieters'
-        ],
-        alternatives: [
-            'benutzername',
-            'at-zeichen',
-            '@',
-            'domain',
-            'postfach',
-            'mailserver',
-            'anbieter',
-            'identifiziert'
-        ]
-    },
-    {
-        question: 'Wie wird ermittelt, welcher Mailserver für eine bestimmte Mailadresse zuständig ist?',
-        correctAnswers: [
-            'Über einen MX-Eintrag im DNS'
-        ],
-        alternatives: [
-            'mx',
-            'mx-eintrag',
-            'mx-record',
-            'dns',
-            'mail exchange',
-            'eintrag'
-        ]
-    },
-    {
-        question: 'Welche beiden Protokolle sind für die Abholung von E-Mails gebräuchlich? Worin unterscheiden sie sich?',
-        correctAnswers: [
-            'POP3 und IMAP',
-            'POP3 holt Mails meist lokal ab und löscht sie oft am Server',
-            'IMAP lässt Mails auf Server und synchronisiert mehrere Geräte'
-        ],
-        alternatives: [
-            'pop3',
-            'imap',
-            'lokal',
-            'löscht',
-            'server',
-            'synchronisiert',
-            'geräte',
-            'mehrere'
-        ]
-    },
-    {
-        question: 'Erklären Sie kurz, was eine monolithische Firewall ist und was man unter einer Zone versteht.',
-        correctAnswers: [
-            'Monolithische Firewall ist zentrales Gerät das gesamten Datenverkehr zwischen Netzbereichen kontrolliert',
-            'Zone ist logisch abgegrenzter Sicherheitsbereich wie internes Netz oder Internet'
-        ],
-        alternatives: [
-            'monolithisch',
-            'zentral',
-            'gerät',
-            'datenverkehr',
-            'netzbereiche',
-            'kontrolliert',
-            'zone',
-            'logisch',
-            'sicherheitsbereich',
-            'intern',
-            'internet'
-        ]
-    },
-    {
-        question: 'Beschreiben Sie anhand eines Beispiels, wie Paketfilterregeln funktionieren.',
-        correctAnswers: [
-            'Paketfilter prüft Felder wie Quelladresse, Zieladresse, Port und Richtung',
-            'Beispiel: Regel erlaubt aus internem Netz Port 80 nach außen und blockiert eingehende Verbindungen'
-        ],
-        alternatives: [
-            'paketfilter',
-            'prüft',
-            'quelladresse',
-            'zieladresse',
-            'port',
-            'richtung',
-            'erlaubt',
-            'blockiert',
-            'intern',
-            'außen',
-            'eingehend'
-        ]
-    },
-    {
-        question: 'Beschreiben Sie die Funktionsweise einer NAT-Firewall.',
-        correctAnswers: [
-            'NAT-Firewall ersetzt interne private Adressen durch öffentliche Adresse',
-            'Führt Zuordnungstabelle',
-            'Antworten werden anhand Tabelle an richtigen internen Host zurückgegeben'
-        ],
-        alternatives: [
-            'nat',
-            'nat-firewall',
-            'ersetzt',
-            'private adresse',
-            'öffentliche adresse',
-            'zuordnung',
-            'tabelle',
-            'antwort',
-            'intern',
-            'host'
-        ]
-    },
-    {
-        question: 'Ordnen Sie zu TCP/IP-Schichten zu: Ethernet-Switch, TCP, ARP, UTP-Kabel, DNS, http, RJ-45, POP3, UDP',
-        correctAnswers: [
-            'Physikalisch: UTP-Kabel, RJ-45',
-            'Netzzugang: Ethernet-Switch, ARP',
-            'Vermittlung: Virtuelle Verbindung, UDP',
-            'Anwendung: DNS, http, POP3, TCP'
-        ],
-        alternatives: [
-            'physikalisch',
-            'utp',
-            'rj-45',
-            'rj45',
-            'netzzugang',
-            'ethernet',
-            'switch',
-            'arp',
-            'vermittlung',
-            'udp',
-            'anwendung',
-            'dns',
-            'http',
-            'pop3',
-            'tcp'
-        ]
-    },
-    {
-        question: 'Erklären Sie: Basisband',
-        correctAnswers: [
-            'Übertragung ohne Frequenzmultiplex'
-        ],
-        alternatives: [
-            'basisband',
-            'übertragung',
-            'ohne frequenzmultiplex',
-            'keine modulation',
-            'direkt'
-        ]
-    },
-    {
-        question: 'Erklären Sie: WAN',
-        correctAnswers: [
-            'Weitverkehrsnetz'
-        ],
-        alternatives: [
-            'wan',
-            'wide area network',
-            'weitverkehr',
-            'weitverkehrsnetz'
-        ]
-    },
-    {
-        question: 'Erklären Sie: IEEE 802.11n',
-        correctAnswers: [
-            'WLAN-Standard mit höherer Datenrate durch MIMO'
-        ],
-        alternatives: [
-            '802.11n',
-            'wlan',
-            'standard',
-            'höhere datenrate',
-            'mimo'
-        ]
-    },
-    {
-        question: 'Erklären Sie: Funktionsverbund',
-        correctAnswers: [
-            'Zusammenspiel mehrerer Systeme zu einem Dienst'
-        ],
-        alternatives: [
-            'funktionsverbund',
-            'zusammenspiel',
-            'systeme',
-            'dienst',
-            'mehrere'
-        ]
-    },
-    {
-        question: 'Erklären Sie: OSI-Referenzmodell',
-        correctAnswers: [
-            'Sieben Schichten zur Strukturierung der Kommunikation'
-        ],
-        alternatives: [
-            'osi',
-            'sieben schichten',
-            '7 schichten',
-            'strukturierung',
-            'kommunikation',
-            'referenzmodell'
-        ]
-    },
-    {
-        question: 'Erklären Sie: Firewall',
-        correctAnswers: [
-            'Gerät zur Filterung und Kontrolle von Datenverkehr'
-        ],
-        alternatives: [
-            'firewall',
-            'gerät',
-            'filterung',
-            'kontrolle',
-            'datenverkehr'
-        ]
-    },
-    {
-        question: 'Erklären Sie: LTE',
-        correctAnswers: [
-            'Mobilfunkstandard der vierten Generation'
-        ],
-        alternatives: [
-            'lte',
-            'mobilfunk',
-            'mobilfunkstandard',
-            'vierte generation',
-            '4g'
-        ]
-    },
-    {
-        question: 'Erklären Sie: DSL-Splitter',
-        correctAnswers: [
-            'Trennt Telefon und DSL-Signal'
-        ],
-        alternatives: [
-            'splitter',
-            'dsl-splitter',
-            'trennt',
-            'telefon',
-            'dsl',
-            'signal'
-        ]
-    },
-    {
-        question: 'Erklären Sie: Digitale Dividende',
-        correctAnswers: [
-            'Freigewordene Funkfrequenzen nach Abschaltung alter Rundfunktechnik'
-        ],
-        alternatives: [
-            'digitale dividende',
-            'freigewordene frequenzen',
-            'funkfrequenzen',
-            'abschaltung',
-            'rundfunktechnik',
-            'alt'
-        ]
-    },
-    {
-        question: 'Erklären Sie: ARP',
-        correctAnswers: [
-            'Protokoll zum Ermitteln der MAC-Adresse zu einer IP-Adresse'
-        ],
-        alternatives: [
-            'arp',
-            'protokoll',
-            'ermitteln',
-            'mac-adresse',
-            'ip-adresse'
-        ]
-    }
-];
-
 // Game State
-let gameMode = null; // 'osi', 'general', oder 'brain'
+let gameMode = null; // 'osi-layer', 'osi-props', 'general', oder 'brain'
 let currentLayer = 0;
 let attempts = 0;
 let deaths = 0;
 let currentQuestions = []; // Für randomisierte Fragen
 let currentQuestionIndex = 0;
+let lives = 5; // Herzen-System
+const MAX_LIVES = 5;
 
 // Brain Miniboss State
 let wrongQuestions = new Map(); // Speichert falsche Fragen und wie oft sie falsch waren
@@ -957,7 +338,8 @@ let brainBossHealth = 0;
 const elements = {
     startScreen: null,
     gameScreen: null,
-    osiModeBtn: null,
+    osiLayerBtn: null,
+    osiPropsBtn: null,
     generalModeBtn: null,
     brainModeBtn: null,
     brainDescription: null,
@@ -971,7 +353,8 @@ const elements = {
     attemptsDisplay: null,
     bossImage: null,
     bossName: null,
-    gameArea: null
+    gameArea: null,
+    heartsContainer: null
 };
 
 // Initialize game
@@ -979,7 +362,8 @@ function initGame() {
     // Cache DOM elements
     elements.startScreen = document.getElementById('startScreen');
     elements.gameScreen = document.getElementById('gameScreen');
-    elements.osiModeBtn = document.getElementById('osiModeBtn');
+    elements.osiLayerBtn = document.getElementById('osiLayerBtn');
+    elements.osiPropsBtn = document.getElementById('osiPropsBtn');
     elements.generalModeBtn = document.getElementById('generalModeBtn');
     elements.brainModeBtn = document.getElementById('brainModeBtn');
     elements.brainDescription = document.getElementById('brainDescription');
@@ -994,9 +378,11 @@ function initGame() {
     elements.bossImage = document.getElementById('bossImage');
     elements.bossName = document.getElementById('bossName');
     elements.gameArea = document.getElementById('gameArea');
+    elements.heartsContainer = document.getElementById('heartsContainer');
 
     // Event listeners for mode selection
-    elements.osiModeBtn.addEventListener('click', () => startGame('osi'));
+    elements.osiLayerBtn.addEventListener('click', () => startGame('osi-layer'));
+    elements.osiPropsBtn.addEventListener('click', () => startGame('osi-props'));
     elements.generalModeBtn.addEventListener('click', () => startGame('general'));
     elements.brainModeBtn.addEventListener('click', () => startGame('brain'));
     
@@ -1018,16 +404,26 @@ function startGame(mode) {
     currentQuestionIndex = 0;
     attempts = 0;
     deaths = 0;
+    lives = MAX_LIVES; // Reset Herzen
     
     // Hide start screen, show game screen
     elements.startScreen.classList.add('hidden');
     elements.gameScreen.classList.remove('hidden');
     
+    // Update hearts display
+    updateHeartsDisplay();
+    
     // Prepare questions based on mode
-    if (mode === 'osi') {
-        // Randomize OSI layers
+    if (mode === 'osi-layer') {
+        // OSI Layer-Nummern: "Was ist Layer 1, 2, 3...?"
         currentQuestions = shuffleArray([...osiLayers]);
-        elements.storyText.textContent = 'Du betrittst den düsteren Prüfungssaal. Jakubasch brüllt: "Nenne mir alle 7 OSI-Schichten! Aber ich werde sie in zufälliger Reihenfolge abfragen!"';
+        elements.storyText.textContent = 'Jakubasch brüllt: "Nenne mir die OSI-Schichten! Was ist Layer 1? Layer 2? ..."';
+        elements.bossImage.src = 'images/Jaku.jpg';
+        elements.bossName.textContent = 'JAKUBASCH - Der Prüfungsdämon';
+    } else if (mode === 'osi-props') {
+        // OSI Layer-Eigenschaften: "Welche Schicht macht X?"
+        currentQuestions = shuffleArray([...osiLayers]);
+        elements.storyText.textContent = 'Jakubasch grinst: "Ich beschreibe dir die Funktion - du nennst mir die Schicht!"';
         elements.bossImage.src = 'images/Jaku.jpg';
         elements.bossName.textContent = 'JAKUBASCH - Der Prüfungsdämon';
     } else if (mode === 'general') {
@@ -1054,6 +450,35 @@ function startGame(mode) {
     updateAttemptsDisplay();
     updateQuestion();
     elements.answerInput.focus();
+}
+
+// Update hearts display
+function updateHeartsDisplay() {
+    const hearts = elements.heartsContainer.querySelectorAll('.heart');
+    hearts.forEach((heart, index) => {
+        if (index < lives) {
+            heart.classList.remove('lost');
+            heart.textContent = '❤️';
+        } else {
+            heart.classList.add('lost');
+            heart.textContent = '🖤';
+        }
+    });
+}
+
+// Lose a heart with animation
+function loseHeart() {
+    if (lives > 0) {
+        lives--;
+        const hearts = elements.heartsContainer.querySelectorAll('.heart');
+        const heartToLose = hearts[lives];
+        heartToLose.classList.add('losing');
+        
+        setTimeout(() => {
+            heartToLose.classList.remove('losing');
+            updateHeartsDisplay();
+        }, 500);
+    }
 }
 
 // Shuffle array (Fisher-Yates algorithm)
@@ -1096,53 +521,35 @@ function handleSubmit() {
 
 // Check if answer is correct
 function isAnswerCorrect(answer) {
-    if (gameMode === 'osi') {
+    if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
+        const currentOsi = currentQuestions[currentQuestionIndex];
         const correctAnswers = [
-            currentQuestions[currentQuestionIndex].name.toLowerCase(),
-            ...currentQuestions[currentQuestionIndex].alternatives.map(a => a.toLowerCase())
+            currentOsi.name.toLowerCase(),
+            ...currentOsi.alternatives.map(a => a.toLowerCase())
         ];
-        return correctAnswers.some(correct => answer.includes(correct.split(' ')[0]));
+        // Auch Layer-Nummer akzeptieren
+        const layerNumber = osiLayers.indexOf(osiLayers.find(l => l.name === currentOsi.name)) + 1;
+        correctAnswers.push(layerNumber.toString());
+        correctAnswers.push('layer ' + layerNumber);
+        correctAnswers.push('schicht ' + layerNumber);
+        
+        return correctAnswers.some(correct => answer.includes(correct.toLowerCase()));
     } else if (gameMode === 'general' || gameMode === 'brain') {
         const currentQ = currentQuestions[currentQuestionIndex];
-        const correctAnswers = [
-            ...currentQ.correctAnswers.map(a => a.toLowerCase()),
-            ...currentQ.alternatives.map(a => a.toLowerCase())
-        ];
         
-        // Wenn die Frage eine bestimmte Anzahl erfordert (z.B. "zwei", "drei", "vier")
-        const requiredCount = getRequiredAnswerCount(currentQ.question);
-        
-        if (requiredCount > 0) {
-            // Zähle wie viele verschiedene Schlüsselwörter der Nutzer genannt hat
-            const foundKeywords = new Set();
-            correctAnswers.forEach(keyword => {
-                if (answer.includes(keyword.toLowerCase())) {
-                    foundKeywords.add(keyword);
-                }
+        // Prüfe ob requiredKeywords definiert sind
+        if (currentQ.requiredKeywords && currentQ.requiredKeywords.length > 0) {
+            // Jede Keyword-Gruppe muss mindestens ein Match haben
+            return currentQ.requiredKeywords.every(keywordGroup => {
+                return keywordGroup.some(keyword => answer.includes(keyword.toLowerCase()));
             });
-            
-            // Mindestens die geforderte Anzahl muss vorhanden sein
-            return foundKeywords.size >= requiredCount;
         }
         
-        // Normale Prüfung - mindestens ein Schlüsselwort muss vorkommen
-        return correctAnswers.some(correct => answer.includes(correct.toLowerCase()));
+        // Fallback: Exakte Übereinstimmung mit correctAnswers
+        const correctAnswers = currentQ.correctAnswers.map(a => a.toLowerCase());
+        return correctAnswers.some(correct => answer === correct);
     }
     return false;
-}
-
-// Ermittelt wie viele Antworten in der Frage gefordert werden
-function getRequiredAnswerCount(question) {
-    const lowerQuestion = question.toLowerCase();
-    
-    if (lowerQuestion.includes('vier')) return 4;
-    if (lowerQuestion.includes('drei')) return 3;
-    if (lowerQuestion.includes('zwei')) return 2;
-    if (lowerQuestion.includes('2 ')) return 2;
-    if (lowerQuestion.includes('3 ')) return 3;
-    if (lowerQuestion.includes('4 ')) return 4;
-    
-    return 0; // Keine spezifische Anzahl gefordert
 }
 
 // Handle correct answer
@@ -1184,10 +591,8 @@ function handleCorrectAnswer() {
     } else {
         currentQuestionIndex++;
         
-        if (gameMode === 'osi') {
-            // Mark layer as correct
-            document.getElementById(`layer${currentQuestionIndex}`).classList.add('correct');
-            showMessage(`✅ Richtig! Frage ${currentQuestionIndex} gemeistert!`, 'success');
+        if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
+            showMessage(`✅ Richtig! Frage ${currentQuestionIndex} von 7 gemeistert!`, 'success');
         } else {
             showMessage(`✅ Richtig! Weiter so!`, 'success');
         }
@@ -1209,7 +614,9 @@ function handleCorrectAnswer() {
 // Handle wrong answer
 function handleWrongAnswer() {
     deaths++;
+    lives--;
     updateAttemptsDisplay();
+    updateHeartsDisplay();
     
     // Track wrong question (außer im OSI-Modus)
     if (gameMode === 'general') {
@@ -1222,6 +629,12 @@ function handleWrongAnswer() {
         // Im Brain-Modus: Reset streak
         const currentQ = currentQuestions[currentQuestionIndex];
         brainStreaks.set(currentQ.question, 0);
+    }
+    
+    // Wenn alle Leben verloren, Fragen resetten
+    if (lives === 0) {
+        showResetOverlay();
+        return;
     }
 
     const laughs = gameMode === 'brain' 
@@ -1246,9 +659,15 @@ function handleWrongAnswer() {
 
 // Show game over overlay
 function showGameOverOverlay(laughText) {
-    const correctAnswer = gameMode === 'osi' 
-        ? currentQuestions[currentQuestionIndex].name
-        : currentQuestions[currentQuestionIndex].correctAnswers[0];
+    const currentQ = currentQuestions[currentQuestionIndex];
+    
+    // Korrekte Antwort anzeigen
+    let correctAnswer;
+    if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
+        correctAnswer = currentQ.name;
+    } else {
+        correctAnswer = currentQ.correctAnswers[0];
+    }
     
     const bossName = gameMode === 'brain' ? 'SMOOTHBRAIN' : 'JAKUBASCH';
     
@@ -1291,6 +710,81 @@ function showGameOverOverlay(laughText) {
     });
 }
 
+// Show reset overlay when all lives are lost
+function showResetOverlay() {
+    const bossName = gameMode === 'brain' ? 'SMOOTHBRAIN' : 'JAKUBASCH';
+    
+    const messages = [
+        "MWAHAHAHA! Alle Leben verloren! Zurück auf Anfang mit dir!",
+        "HAHAHAHA! Du hast 5 mal versagt! Jetzt geht alles von vorne los!",
+        "HOHOHO! Pathétisch! Deine Chancen sind AUFGEBRAUCHT!",
+        "KEHEHE! 5 Fehler! Dein Wissen ist so LÖCHRIG wie ein Schweizer Käse!"
+    ];
+    
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'game-over-overlay';
+    overlay.innerHTML = `
+        <div class="game-over-box">
+            <div class="jakubasch-laugh">
+                💀 ${bossName}: "${randomMessage}" 💀
+            </div>
+            <div class="hearts-lost-display" style="font-size: 3em; margin: 20px 0;">
+                💔💔💔💔💔
+            </div>
+            <div class="message error" style="margin: 20px 0;">
+                ❌ ALLE LEBEN VERLOREN! ❌<br>
+                Die Fragen werden zurückgesetzt!
+            </div>
+            <button class="button retry" id="restartBtn">
+                🔄 VON VORNE STARTEN!
+            </button>
+            <button class="button" id="mainMenuBtn2" style="margin-top: 10px; background: linear-gradient(135deg, #555 0%, #333 100%);">
+                🏠 Zurück zum Hauptmenü
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Restart button handler - Reset und neu starten
+    document.getElementById('restartBtn').addEventListener('click', () => {
+        document.body.removeChild(overlay);
+        resetQuestionsAndLives();
+    });
+    
+    // Main menu button handler
+    document.getElementById('mainMenuBtn2').addEventListener('click', () => {
+        document.body.removeChild(overlay);
+        backToStart();
+    });
+}
+
+// Reset questions and lives
+function resetQuestionsAndLives() {
+    lives = 5;
+    currentQuestionIndex = 0;
+    
+    // Re-shuffle questions based on mode
+    if (gameMode === 'osi-layer' || gameMode === 'osi-props') {
+        currentQuestions = shuffleArray([...osiLayers]);
+        // Reset all layer markers
+        for (let i = 1; i <= 7; i++) {
+            document.getElementById(`layer${i}`).classList.remove('correct');
+        }
+    } else if (gameMode === 'general') {
+        currentQuestions = shuffleArray([...generalQuestions]);
+    } else if (gameMode === 'brain') {
+        currentQuestions = shuffleArray([...currentQuestions.map(q => ({...q}))]);
+    }
+    
+    updateHeartsDisplay();
+    updateBossHealth();
+    updateQuestion();
+    elements.answerInput.focus();
+}
+
 // Back to start screen
 function backToStart() {
     elements.gameScreen.classList.add('hidden');
@@ -1327,7 +821,18 @@ function resetGame() {
 
 // Update question text
 function updateQuestion() {
-    if (gameMode === 'osi') {
+    if (gameMode === 'osi-layer') {
+        // OSI Layer-Nummern Modus: Frage nach dem Namen des Layers
+        const currentOsiLayer = currentQuestions[currentQuestionIndex];
+        elements.question.innerHTML = `
+            <strong>Frage ${currentQuestionIndex + 1}/${currentQuestions.length}:</strong><br>
+            Welche OSI-Schicht ist Layer ${currentOsiLayer.layer}?<br>
+            <span style="font-size: 0.9em; color: #4ecdc4; margin-top: 10px; display: block;">
+                💡 Gib den Namen der Schicht ein
+            </span>
+        `;
+    } else if (gameMode === 'osi-props') {
+        // OSI Eigenschaften Modus: Frage basierend auf Beschreibung
         const currentOsiLayer = currentQuestions[currentQuestionIndex];
         elements.question.innerHTML = `
             <strong>Frage ${currentQuestionIndex + 1}/${currentQuestions.length}:</strong><br>
