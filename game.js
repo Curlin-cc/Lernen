@@ -57,8 +57,8 @@ const generalQuestions = [
     },
     {
         question: 'Welche grundlegenden Medienzugriffsverfahren gibt es? Nennen Sie jeweils ein Beispiel.',
-        correctAnswers: ['Deterministisch zum Beispiel Token Ring. Wettbewerbsbasiert zum Beispiel CSMA CD. Reservierungsbasiert zum Beispiel Polling'],
-        requiredKeywords: [['deterministisch', 'token'], ['wettbewerb', 'csma'], ['reservierung', 'polling']]
+        correctAnswers: ['Deterministisch Token Passing: Token als spezielles Datenpaket wird reihum von Endgerät zu Endgerät gegeben. Nichtdeterministisch CSMA/CD: Es überträgt immer wenn keine Übertragung, wenn Medium frei senden. Bei Kollision abbrechen, zufällige Zeit warten, wieder versuchen.'],
+        requiredKeywords: [['deterministisch', 'token'], ['nichtdeterministisch', 'csma'], ['kollision', 'reihum', 'endgerät']]
     },
     {
         question: 'Wie heißt das Verkabelungskonzept bei der Kommunikationsinfrastruktur in Bürogebäuden? Welche Topologie entsteht?',
