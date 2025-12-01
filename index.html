@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSI-Quest: Die Schlacht gegen Jakubasch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px #ff6b6b;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b; }
+            to { text-shadow: 0 0 20px #ff6b6b, 0 0 30px #ff6b6b, 0 0 40px #ff6b6b; }
+        }
+
+        .boss-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .boss-name {
+            font-size: 2em;
+            color: #ff3838;
+            margin-bottom: 10px;
+        }
+
+        .boss-image {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            border-radius: 50%;
+            border: 5px solid #ff6b6b;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+            object-fit: cover;
+            animation: bossFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes bossFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .health-bar {
+            width: 100%;
+            height: 30px;
+            background: #2a2a2a;
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ff3838);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .story-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #4ecdc4;
+            border-radius: 5px;
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #4ecdc4;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(78, 205, 196, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .input-container {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #4ecdc4;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Courier New', monospace;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+        }
+
+        .button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.retry {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .button.retry:hover {
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.5);
+        }
+
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .message.success {
+            background: rgba(46, 213, 115, 0.2);
+            border: 2px solid #2ed573;
+            color: #2ed573;
+        }
+
+        .message.error {
+            background: rgba(255, 71, 87, 0.2);
+            border: 2px solid #ff4757;
+            color: #ff4757;
+        }
+
+        .message.victory {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid gold;
+            color: gold;
+            font-size: 1.5em;
+            animation: victory 1s ease-in-out infinite;
+        }
+
+        @keyframes victory {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .progress {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .layer {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            border: 2px solid #555;
+            border-radius: 5px;
+            line-height: 36px;
+            font-weight: bold;
+        }
+
+        .layer.correct {
+            background: #2ed573;
+            border-color: #2ed573;
+            color: white;
+        }
+
+        .jakubasch-laugh {
+            font-size: 1.3em;
+            color: #ff3838;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff3838;
+            border-radius: 10px;
+            animation: shake 0.5s;
+        }
+
+        .correct-answer {
+            font-size: 1.4em;
+            color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .attempts {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .game-over-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .game-over-box {
+            background: rgba(255, 0, 0, 0.2);
+            border: 3px solid #ff3838;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 56, 56, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="title">⚔️ OSI-QUEST ⚔️</h1>
+        
+        <div class="boss-container">
+            <div class="boss-name">JAKUBASCH - Der Prüfungsdämon</div>
+            <img src="images/Jaku.jpg" alt="Jakubasch" class="boss-image" id="bossImage">
+            <div class="health-bar">
+                <div class="health-fill" id="bossHealth" style="width: 100%;">
+                    <span id="healthText">HP: 7/7</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyText">
+            Du betrittst den düsteren Prüfungssaal. Vor dir erhebt sich Jakubasch, der gefürchtete Prüfungsdämon! 
+            Er lacht höhnisch: "HAHAHA! Ein weiterer Student der glaubt, das OSI-Modell zu kennen? 
+            Ich werde deine Zukunft zerstören! Nenne mir alle 7 Schichten in der richtigen Reihenfolge - von unten nach oben!"
+        </div>
+
+        <div class="attempts" id="attempts">Versuche: 0 | Tode: 0</div>
+
+        <div class="progress" id="progress">
+            <div class="layer" id="layer1">1</div>
+            <div class="layer" id="layer2">2</div>
+            <div class="layer" id="layer3">3</div>
+            <div class="layer" id="layer4">4</div>
+            <div class="layer" id="layer5">5</div>
+            <div class="layer" id="layer6">6</div>
+            <div class="layer" id="layer7">7</div>
+        </div>
+
+        <div id="gameArea">
+            <div class="question" id="question">
+                Schicht 1 (unterste Schicht): Was ist die erste Schicht des OSI-Modells?
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="answerInput" placeholder="Deine Antwort..." autocomplete="off">
+            </div>
+
+            <button class="button" id="submitBtn">⚔️ ANTWORT ABGEBEN</button>
+        </div>
+
+        <div id="messageArea"></div>
+    </div>
+
+    <script>
+        // Das OSI-Modell von unten nach oben
+        const osiLayers = [
+            { name: 'Physical', alternatives: ['Bitübertragungsschicht', 'Physikalische Schicht', 'Layer 1'] },
+            { name: 'Data Link', alternatives: ['Sicherungsschicht', 'Verbindungsschicht', 'Layer 2'] },
+            { name: 'Network', alternatives: ['Vermittlungsschicht', 'Netzwerkschicht', 'Layer 3'] },
+            { name: 'Transport', alternatives: ['Transportschicht', 'Layer 4'] },
+            { name: 'Session', alternatives: ['Sitzungsschicht', 'Layer 5'] },
+            { name: 'Presentation', alternatives: ['Darstellungsschicht', 'Präsentationsschicht', 'Layer 6'] },
+            { name: 'Application', alternatives: ['Anwendungsschicht', 'Layer 7'] }
+        ];
+
+        let currentLayer = 0;
+        let attempts = 0;
+        let deaths = 0;
+
+        const answerInput = document.getElementById('answerInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const question = document.getElementById('question');
+        const messageArea = document.getElementById('messageArea');
+        const storyText = document.getElementById('storyText');
+        const bossHealth = document.getElementById('bossHealth');
+        const healthText = document.getElementById('healthText');
+        const attemptsDisplay = document.getElementById('attempts');
+        const bossImage = document.getElementById('bossImage');
+
+        // Enter-Taste funktioniert auch
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+
+        submitBtn.addEventListener('click', () => {
+            const answer = answerInput.value.trim().toLowerCase();
+            
+            if (!answer) {
+                showMessage('Du musst eine Antwort eingeben!', 'error');
+                return;
+            }
+
+            attempts++;
+            attemptsDisplay.textContent = `Versuche: ${attempts} | Tode: ${deaths}`;
+
+            // Antwort checken
+            const correctAnswers = [
+                osiLayers[currentLayer].name.toLowerCase(),
+                ...osiLayers[currentLayer].alternatives.map(a => a.toLowerCase())
+            ];
+
+            const isCorrect = correctAnswers.some(correct => answer.includes(correct.split(' ')[0]));
+
+            if (isCorrect) {
+                handleCorrectAnswer();
+            } else {
+                handleWrongAnswer();
+            }
+
+            answerInput.value = '';
+        });
+
+        function handleCorrectAnswer() {
+            currentLayer++;
+            
+            // Schicht als richtig markieren
+            document.getElementById(`layer${currentLayer}`).classList.add('correct');
+            
+            // Boss-Health reduzieren
+            const healthPercent = ((7 - currentLayer) / 7) * 100;
+            bossHealth.style.width = healthPercent + '%';
+            healthText.textContent = `HP: ${7 - currentLayer}/7`;
+
+            // Boss-Bild wackeln lassen bei Treffer
+            bossImage.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                bossImage.style.animation = 'bossFloat 3s ease-in-out infinite';
+            }, 500);
+
+            showMessage(`✅ Richtig! Schicht ${currentLayer} gemeistert!`, 'success');
+
+            if (currentLayer === 7) {
+                victory();
+            } else {
+                updateQuestion();
+            }
+        }
+
+        function handleWrongAnswer() {
+            deaths++;
+            attemptsDisplay.textContent = `Versuche: ${attempts} | Tode: ${deaths}`;
+
+            const laughs = [
+                "HAHAHAHA! FALSCH! Deine Zukunft ist RUINIERT! Du wirst in der Prüfung VERSAGEN!",
+                "MWAHAHAHA! Pathétisch! Du kennst nicht mal die Grundlagen! GESCHEITERT!",
+                "HOHOHO! Wie armsélig! Du hast deine Karriere gerade ZERSTÖRT!",
+                "KEHEHE! Ein weiteres Opfer! Deine Zukunft gehört MIR!",
+                "HIHIHI! So wird das NICHTS mit dem Abschluss! VERSAGER!"
+            ];
+
+            const randomLaugh = laughs[Math.floor(Math.random() * laughs.length)];
+            
+            // Game Over Overlay erstellen
+            const overlay = document.createElement('div');
+            overlay.className = 'game-over-overlay';
+            overlay.innerHTML = `
+                <div class="game-over-box">
+                    <div class="jakubasch-laugh">
+                        💀 JAKUBASCH: "${randomLaugh}" 💀
+                    </div>
+                    <div class="correct-answer">
+                        📚 Die richtige Antwort wäre gewesen:<br>
+                        <strong style="font-size: 1.3em; color: #2ed573;">${osiLayers[currentLayer].name}</strong>
+                    </div>
+                    <div class="message error" style="margin: 20px 0;">
+                        ☠️ DU BIST GESTORBEN! ☠️<br>
+                        Alle Fortschritte verloren!
+                    </div>
+                    <button class="button retry" id="retryBtn">
+                        ⚔️ NÄCHSTES MAL KRIEGE ICH DICH!
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Retry-Button Handler
+            document.getElementById('retryBtn').addEventListener('click', () => {
+                document.body.removeChild(overlay);
+                resetGame();
+                storyText.textContent = "Du erwachst wieder vor Jakubasch. Er grinst dich hämisch an: 'Bereit für einen weiteren Versuch, Versager?'";
+            });
+        }
+
+        function resetGame() {
+            currentLayer = 0;
+            bossHealth.style.width = '100%';
+            healthText.textContent = 'HP: 7/7';
+            
+            // Alle Schichten zurücksetzen
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById(`layer${i}`).classList.remove('correct');
+            }
+            
+            updateQuestion();
+            answerInput.focus();
+        }
+
+        function updateQuestion() {
+            const layerNames = ['unterste', 'zweite', 'dritte', 'vierte', 'fünfte', 'sechste', 'siebte (oberste)'];
+            question.textContent = `Schicht ${currentLayer + 1} (${layerNames[currentLayer]} Schicht): Was ist die ${layerNames[currentLayer]} Schicht des OSI-Modells?`;
+        }
+
+        function victory() {
+            messageArea.innerHTML = `
+                <div class="message victory">
+                    🎉 SIEG! 🎉<br>
+                    Du hast Jakubasch besiegt!<br>
+                    Alle 7 OSI-Schichten gemeistert!<br>
+                    Deine Zukunft ist gerettet! ✨
+                </div>
+            `;
+
+            storyText.innerHTML = `
+                Jakubasch fällt auf die Knie: "NEIN! Das ist unmöglich! Du... du kennst sie ALLE!"<br><br>
+                Er löst sich in Rauch auf. Du hast es geschafft!<br><br>
+                <strong>Statistik:</strong><br>
+                Versuche: ${attempts} | Tode: ${deaths}<br><br>
+                🏆 Du hast das OSI-Modell gemeistert! 🏆
+            `;
+
+            // Boss-Bild ausblenden bei Sieg
+            bossImage.style.opacity = '0.3';
+            bossImage.style.filter = 'grayscale(100%)';
+
+            document.getElementById('gameArea').classList.add('hidden');
+            submitBtn.textContent = '🔄 NOCHMAL SPIELEN';
+            submitBtn.classList.remove('hidden');
+            submitBtn.onclick = () => location.reload();
+        }
+
+        function showMessage(text, type) {
+            const msg = document.createElement('div');
+            msg.className = `message ${type}`;
+            msg.textContent = text;
+            messageArea.innerHTML = '';
+            messageArea.appendChild(msg);
+            
+            setTimeout(() => {
+                if (messageArea.contains(msg)) {
+                    messageArea.removeChild(msg);
+                }
+            }, 3000);
+        }
+
+        // Fokus auf Input beim Start
+        answerInput.focus();
+    </script>
+</body>
+</html>
