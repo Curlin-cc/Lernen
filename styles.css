@@ -222,6 +222,26 @@ input[type="text"]:focus {
     animation: shake 0.5s;
 }
 
+.counter-btn {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+    margin-bottom: 10px;
+    animation: counterPulse 1.5s ease-in-out infinite;
+}
+
+.counter-btn:hover {
+    box-shadow: 0 10px 30px rgba(243, 156, 18, 0.6);
+    transform: scale(1.05);
+}
+
+@keyframes counterPulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(243, 156, 18, 0.5); 
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(243, 156, 18, 0.8); 
+    }
+}
+
 .correct-answer {
     font-size: 1.4em;
     color: #4ecdc4;

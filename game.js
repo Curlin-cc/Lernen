@@ -1110,7 +1110,7 @@ function showGameOverOverlay(laughText) {
         correctAnswer = currentQ.correctAnswers[0];
     }
     
-    const bossName = gameMode === 'brain' ? 'SMOOTHBRAIN' : 'JAKUBASCH';
+    const bossName = gameMode === 'brain' ? 'SMOOTHBRAIN' : (gameMode === 'ralph' ? 'RADMACHER RALPH' : 'JAKUBASCH');
     
     const overlay = document.createElement('div');
     overlay.className = 'game-over-overlay';
@@ -1127,6 +1127,9 @@ function showGameOverOverlay(laughText) {
                 ❌ FALSCH! ❌<br>
                 Versuch es nochmal!
             </div>
+            <button class="button counter-btn" id="counterBtn">
+                🛡️ COUNTER! Das war richtig!
+            </button>
             <button class="button retry" id="continueBtn">
                 ⚔️ WEITER KÄMPFEN!
             </button>
@@ -1138,6 +1141,12 @@ function showGameOverOverlay(laughText) {
     
     document.body.appendChild(overlay);
     
+    // Counter button handler - Antwort war doch richtig!
+    document.getElementById('counterBtn').addEventListener('click', () => {
+        document.body.removeChild(overlay);
+        handleCounter();
+    });
+    
     // Continue button handler - bleibt im aktuellen Modus
     document.getElementById('continueBtn').addEventListener('click', () => {
         document.body.removeChild(overlay);
@@ -1148,6 +1157,63 @@ function showGameOverOverlay(laughText) {
     document.getElementById('mainMenuBtn').addEventListener('click', () => {
         document.body.removeChild(overlay);
         backToStart();
+    });
+}
+
+// Handle Counter - Spieler sagt seine Antwort war doch richtig
+function handleCounter() {
+    // Rückgängig machen der falschen Antwort
+    deaths--;
+    lives++;
+    updateAttemptsDisplay();
+    updateHeartsDisplay();
+    
+    // Falls im general/ralph Modus, wrongQuestions korrigieren
+    if (gameMode === 'general' || gameMode === 'ralph') {
+        const currentQ = currentQuestions[currentQuestionIndex];
+        const wrongCount = wrongQuestions.get(currentQ.question) || 0;
+        if (wrongCount > 0) {
+            wrongQuestions.set(currentQ.question, wrongCount - 1);
+            if (wrongCount - 1 === 0) {
+                wrongQuestions.delete(currentQ.question);
+            }
+            saveWrongQuestions();
+            updateBrainButton();
+        }
+    } else if (gameMode === 'brain') {
+        // Im Brain-Modus: Streak wiederherstellen
+        const currentQ = currentQuestions[currentQuestionIndex];
+        const currentStreak = brainStreaks.get(currentQ.question) || 0;
+        brainStreaks.set(currentQ.question, currentStreak + 1);
+    }
+    
+    // Boss-Name für Overlay
+    const bossName = gameMode === 'brain' ? 'SMOOTHBRAIN' : (gameMode === 'ralph' ? 'RADMACHER RALPH' : 'JAKUBASCH');
+    
+    // Counter Overlay anzeigen
+    const overlay = document.createElement('div');
+    overlay.className = 'game-over-overlay';
+    overlay.innerHTML = `
+        <div class="game-over-box" style="border-color: #2ed573;">
+            <div class="jakubasch-laugh" style="background: rgba(0, 255, 0, 0.2); border-color: #2ed573; color: #2ed573;">
+                😤 ${bossName}: "WAS?! Das war richtig?! Ich muss das nachkorrigieren... VERDAMMT!" 😤
+            </div>
+            <div class="message success" style="margin: 20px 0;">
+                🛡️ COUNTER ERFOLGREICH! 🛡️<br>
+                Du hast ${bossName} überlistet!
+            </div>
+            <button class="button retry" id="counterContinueBtn" style="background: linear-gradient(135deg, #2ed573 0%, #00b894 100%);">
+                ⚔️ WEITER ZUR NÄCHSTEN FRAGE!
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    document.getElementById('counterContinueBtn').addEventListener('click', () => {
+        document.body.removeChild(overlay);
+        // Jetzt als richtige Antwort behandeln
+        handleCorrectAnswer();
     });
 }
 
