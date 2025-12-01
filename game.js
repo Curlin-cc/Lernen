@@ -67,8 +67,8 @@ const generalQuestions = [
     },
     {
         question: 'Wie viele Wanddosen sehen Sie in einem Büroraum mit drei Arbeitsplätzen vor? Warum?',
-        correctAnswers: ['Zwei Dosen pro Arbeitsplatz also sechs insgesamt. Grund ist Redundanz und gleichzeitige Nutzung unterschiedlicher Dienste'],
-        requiredKeywords: [['sechs', '6', 'zwei pro'], ['redundanz', 'dienste', 'gleichzeitig']]
+        correctAnswers: ['Pro Platz 2-4 Dosen für Redundanz. Es muss Platz für Arbeitsplatz-PC, Netzwerkdrucker, Notebook und VoIP-Telefon sein.'],
+        requiredKeywords: [['2', '3', '4', 'pro platz'], ['redundanz'], ['pc', 'drucker', 'notebook', 'voip', 'telefon']]
     },
     {
         question: 'Nennen Sie für UTP, FTP, S/FTP und Glasfasern jeweils geeignete Anwendungsbereiche.',
