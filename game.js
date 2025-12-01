@@ -764,6 +764,7 @@ let wrongQuestions = new Map(); // Speichert falsche Fragen und wie oft sie fals
 let brainQuestions = []; // Die aktuellen Brain-Challenge Fragen
 let brainStreaks = new Map(); // Zählt korrekte Antworten in Folge (muss 3 sein)
 let brainBossTotalHealth = 0; // Gesamtzahl der Fragen zu Beginn
+let lastBrainStreak = 0; // Speichert die Streak vor einem Reset (für Counter)
 
 // DOM Elements
 const elements = {
@@ -1007,16 +1008,12 @@ function handleCorrectAnswer() {
         const newStreak = currentStreak + 1;
         brainStreaks.set(currentQ.question, newStreak);
         
-        console.log(`Brain Mode: Frage "${currentQ.question.substring(0, 30)}..." - Streak: ${newStreak}/3`);
-        
         if (newStreak >= 3) {
             // Frage gemeistert!
-            console.log('GEMEISTERT! Entferne Frage...');
             showMessage(`✅ GEMEISTERT! Diese Frage 3x in Folge richtig! 🔥 Frage entfernt!`, 'success');
             
             // Entferne die gemeisterte Frage aus currentQuestions ZUERST
             currentQuestions.splice(currentQuestionIndex, 1);
-            console.log(`Verbleibende Fragen: ${currentQuestions.length}`);
             
             // Dann aus wrongQuestions löschen und speichern
             wrongQuestions.delete(currentQ.question);
@@ -1076,8 +1073,9 @@ function handleWrongAnswer() {
     
     // Track wrong question im Brain-Modus
     if (gameMode === 'brain') {
-        // Im Brain-Modus: Reset streak
+        // Im Brain-Modus: Speichere alte Streak und dann Reset
         const currentQ = currentQuestions[currentQuestionIndex];
+        lastBrainStreak = brainStreaks.get(currentQ.question) || 0;
         brainStreaks.set(currentQ.question, 0);
     }
     
@@ -1177,12 +1175,11 @@ function handleCounter() {
     updateAttemptsDisplay();
     updateHeartsDisplay();
     
-    // Im Brain-Modus Streak wiederherstellen
+    // Im Brain-Modus Streak wiederherstellen (die alte Streak vor dem Reset)
     if (gameMode === 'brain') {
-        // Im Brain-Modus: Streak wiederherstellen
         const currentQ = currentQuestions[currentQuestionIndex];
-        const currentStreak = brainStreaks.get(currentQ.question) || 0;
-        brainStreaks.set(currentQ.question, currentStreak + 1);
+        // Stelle die alte Streak wieder her (vor dem Reset durch handleWrongAnswer)
+        brainStreaks.set(currentQ.question, lastBrainStreak);
     }
     
     // Boss-Name für Overlay
