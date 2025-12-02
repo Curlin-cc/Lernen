@@ -788,7 +788,9 @@ const elements = {
     bossName: null,
     gameArea: null,
     heartsContainer: null,
-    brainInlineBtn: null
+    brainInlineBtn: null,
+    jakuLearnBtn: null,
+    ralphLearnBtn: null
 };
 
 // Initialize game
@@ -815,6 +817,8 @@ function initGame() {
     elements.gameArea = document.getElementById('gameArea');
     elements.heartsContainer = document.getElementById('heartsContainer');
     elements.brainInlineBtn = document.getElementById('brainInlineBtn');
+    elements.jakuLearnBtn = document.getElementById('jakuLearnBtn');
+    elements.ralphLearnBtn = document.getElementById('ralphLearnBtn');
 
     // Event listeners for mode selection
     elements.osiLayerBtn.addEventListener('click', () => startGame('osi-layer'));
@@ -822,6 +826,8 @@ function initGame() {
     elements.generalModeBtn.addEventListener('click', () => startGame('general'));
     elements.ralphModeBtn.addEventListener('click', () => startGame('ralph'));
     elements.brainModeBtn.addEventListener('click', () => startGame('brain'));
+    elements.jakuLearnBtn.addEventListener('click', () => startGame('learn-jaku'));
+    elements.ralphLearnBtn.addEventListener('click', () => startGame('learn-ralph'));
     
     // Event listener for inline brain button
     elements.brainInlineBtn.addEventListener('click', handleBrainInlineClick);
@@ -878,6 +884,20 @@ function startGame(mode) {
         elements.storyText.textContent = 'Radmacher Ralph erscheint: "HAHA! Glaubst du, du kennst die von-Neumann-Architektur? Zeig mir was du drauf hast!"';
         elements.bossImage.src = 'images/Ralph.jpg';
         elements.bossName.textContent = 'RADMACHER RALPH - Der Hardware-Dämon';
+    } else if (mode === 'learn-jaku') {
+        // Lernmodus Jakubasch - Alle Netzwerk-Fragen ohne Herzen
+        currentQuestions = shuffleArray([...generalQuestions]);
+        elements.storyText.innerHTML = '📖 <strong>LERNMODUS</strong> - Jakubasch flüstert: "Heute bin ich gnädig... Lerne in Ruhe, keine Herzen, kein Druck!"';
+        elements.bossImage.src = 'images/Jaku.jpg';
+        elements.bossName.textContent = 'JAKUBASCH - Lernmodus';
+        elements.heartsContainer.style.display = 'none'; // Verstecke Herzen
+    } else if (mode === 'learn-ralph') {
+        // Lernmodus Ralph - Alle Rechnerarchitektur-Fragen ohne Herzen
+        currentQuestions = shuffleArray([...ralphQuestions]);
+        elements.storyText.innerHTML = '📖 <strong>LERNMODUS</strong> - Ralph murmelt: "Na gut, heute zeig ich dir alles in Ruhe... Keine Herzen, nur Lernen!"';
+        elements.bossImage.src = 'images/Ralph.jpg';
+        elements.bossName.textContent = 'RADMACHER RALPH - Lernmodus';
+        elements.heartsContainer.style.display = 'none'; // Verstecke Herzen
     } else if (mode === 'brain') {
         // Brain mode - nur schwierige Fragen von ALLEN Bossen
         const allQuestions = [...generalQuestions, ...ralphQuestions];
@@ -891,6 +911,11 @@ function startGame(mode) {
         elements.storyText.innerHTML = 'Ein neuer Gegner erscheint: <strong>SMOOTHBRAIN</strong> - So sieht dein Hirn aus HAHA!<br>"Ich bin aus deinen Fehlern geboren! Du musst jede Frage 3 MAL HINTEREINANDER richtig beantworten, um mich zu besiegen!"';
         elements.bossImage.src = 'images/Brain.jpg';
         elements.bossName.textContent = 'SMOOTHBRAIN - Dein Hirn';
+    }
+    
+    // Zeige Herzen nur wenn NICHT im Lernmodus
+    if (mode !== 'learn-jaku' && mode !== 'learn-ralph') {
+        elements.heartsContainer.style.display = 'flex';
     }
     
     updateBossHealth();
@@ -1066,10 +1091,14 @@ function handleCorrectAnswer() {
 
 // Handle wrong answer
 function handleWrongAnswer() {
+    const isLearnMode = gameMode === 'learn-jaku' || gameMode === 'learn-ralph';
+    
     deaths++;
-    lives--;
+    if (!isLearnMode) {
+        lives--;
+        updateHeartsDisplay();
+    }
     updateAttemptsDisplay();
-    updateHeartsDisplay();
     
     // Track wrong question im Brain-Modus
     if (gameMode === 'brain') {
@@ -1079,13 +1108,21 @@ function handleWrongAnswer() {
         brainStreaks.set(currentQ.question, 0);
     }
     
-    // Wenn alle Leben verloren, Fragen resetten
-    if (lives === 0) {
+    // Wenn alle Leben verloren (nur im normalen Modus), Fragen resetten
+    if (!isLearnMode && lives === 0) {
         showResetOverlay();
         return;
     }
 
-    const laughs = gameMode === 'brain' 
+    // Im Lernmodus freundlichere Nachrichten
+    const laughs = isLearnMode
+        ? [
+            "Nicht ganz richtig, aber du lernst noch! 📚",
+            "Fast! Schau dir die richtige Antwort an und merk sie dir! 💡",
+            "Macht nichts, beim Lernen darf man Fehler machen! 📖",
+            "Gut, dass du übst! Die richtige Antwort steht unten. 👇"
+        ]
+        : gameMode === 'brain' 
         ? [
             "HAHAHA! RESET! Deine Serie ist unterbrochen!",
             "SMOOTHBRAIN lacht: Du wirst diese Frage NIE lernen!",
@@ -1457,8 +1494,8 @@ function updateBrainButton() {
 function updateBrainInlineButton() {
     if (!elements.brainInlineBtn) return;
     
-    // Nur in general/ralph Modus sichtbar
-    if (gameMode === 'general' || gameMode === 'ralph') {
+    // In general/ralph/learn Modi sichtbar
+    if (gameMode === 'general' || gameMode === 'ralph' || gameMode === 'learn-jaku' || gameMode === 'learn-ralph') {
         elements.brainInlineBtn.style.display = 'flex';
         
         const currentQ = currentQuestions[currentQuestionIndex];

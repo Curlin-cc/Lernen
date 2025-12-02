@@ -436,6 +436,22 @@ input[type="text"]:focus {
     box-shadow: 0 10px 30px rgba(46, 213, 115, 0.6);
 }
 
+.learn-button {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+
+.learn-button:hover {
+    box-shadow: 0 10px 30px rgba(243, 156, 18, 0.6);
+}
+
+.ralph-learn {
+    background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+}
+
+.ralph-learn:hover {
+    box-shadow: 0 10px 30px rgba(26, 188, 156, 0.6);
+}
+
 .mode-description {
     display: block;
     font-size: 0.6em;
