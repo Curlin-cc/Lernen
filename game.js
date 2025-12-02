@@ -1006,7 +1006,7 @@ function isAnswerCorrect(answer) {
         correctAnswers.push('schicht ' + layerNumber);
         
         return correctAnswers.some(correct => answer.includes(correct.toLowerCase()));
-    } else if (gameMode === 'general' || gameMode === 'ralph' || gameMode === 'brain') {
+    } else if (gameMode === 'general' || gameMode === 'ralph' || gameMode === 'brain' || gameMode === 'learn-jaku' || gameMode === 'learn-ralph') {
         const currentQ = currentQuestions[currentQuestionIndex];
         
         // Prüfe ob requiredKeywords definiert sind
