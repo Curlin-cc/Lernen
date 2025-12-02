@@ -1380,6 +1380,10 @@ function updateQuestion() {
         elements.question.textContent = `Frage ${currentQuestionIndex + 1}/${currentQuestions.length}: ${currentQuestions[currentQuestionIndex].question}`;
     } else if (gameMode === 'ralph') {
         elements.question.textContent = `Frage ${currentQuestionIndex + 1}/${currentQuestions.length}: ${currentQuestions[currentQuestionIndex].question}`;
+    } else if (gameMode === 'learn-jaku') {
+        elements.question.innerHTML = `<strong>📖 Lernmodus - Frage ${currentQuestionIndex + 1}/${currentQuestions.length}:</strong><br>${currentQuestions[currentQuestionIndex].question}`;
+    } else if (gameMode === 'learn-ralph') {
+        elements.question.innerHTML = `<strong>📖 Lernmodus - Frage ${currentQuestionIndex + 1}/${currentQuestions.length}:</strong><br>${currentQuestions[currentQuestionIndex].question}`;
     } else if (gameMode === 'brain') {
         const currentQ = currentQuestions[currentQuestionIndex];
         const streak = brainStreaks.get(currentQ.question) || 0;
