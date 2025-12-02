@@ -361,11 +361,6 @@ const ralphQuestions = [
         requiredKeywords: [['mov'], ['add'], ['jmp']]
     },
     {
-        question: 'Führen Sie folgendes Programm mit dem Adventskalender-Beispiel aus der Vorlesung durch.',
-        correctAnswers: ['R1 erhält 17, R2 erhält 13. Addition: 17+13=30 wird ausgegeben. Multiplikation: 17*13=221 wird ausgegeben.'],
-        requiredKeywords: [['17'], ['13'], ['30'], ['221']]
-    },
-    {
         question: 'Welche Probleme kann es geben, wenn auf einem System mehrere Programme gleichzeitig laufen sollen?',
         correctAnswers: ['Race Conditions, gegenseitiges Überschreiben von Speicherbereichen, Deadlocks und Ressourcenkonflikte.'],
         requiredKeywords: [['race condition', 'wettlauf'], ['deadlock', 'verklemmung'], ['speicher', 'ressource', 'überschreib']]
